@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="001-testdata-1" author="ad">
+        <insert tableName="doctor">
+            <column name="first_name" value="Pawel" />
+            <column name="last_name" value="Wiktorczyk" />
+            <column name="password" value="paw" />
+            <column name="role" value= "doctor" />
+             <column name="age" value="35" />
+            <column name="specialist" value= "internist" />
+             <column name="experience" value= "middle" />       
+            <column name="photo_path" value="uploads/PawelPhoto.png" />
+        </insert>
+
+         <insert tableName="doctor">
+            <column name="first_name" value="Anna" />
+            <column name="last_name" value="Krawczyk" />
+            <column name="password" value="kraw" />
+            <column name="role" value= "doctor" />
+             <column name="age" value="43" />
+            <column name="specialist" value= "pediatrician" />
+             <column name="experience" value= "high" />
+             <column name="photo_path" value="uploads/AnnaPhoto.png" />
+        </insert>
+
+
+        
+
+
+    </changeSet>
+</databaseChangeLog>
