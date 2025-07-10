@@ -17,19 +17,19 @@ public class Patient {
     String lastName;
     String password;
     String role;  
-    String pothoPath;
+   
     //String note; 
 
     public Patient() {
     }
 
-    public Patient(Long id, String firstName, String lastName, String password, String role, String pothoPath) {
+    public Patient(Long id, String firstName, String lastName, String password, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.role = role;
-        this.pothoPath = pothoPath;
+     
     
     }
 
@@ -64,10 +64,5 @@ public class Patient {
     public void setRole(String role) {
         this.role = role;
     }
-    public String getPothoPath() {
-        return pothoPath;
-    }
-    public void setPothoPath(String pothoPath) {
-        this.pothoPath = pothoPath;
-    }
+ 
 }

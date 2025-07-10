@@ -13,8 +13,7 @@
             <column name="lastName" type="VARCHAR(100)" />
             <column name="password" type="VARCHAR(200)" />
             <column name="role" type="VARCHAR(100)" />
-            <column name="note" type="VARCHAR(500)" />
-
+         
         </createTable>
 
     </changeSet>
