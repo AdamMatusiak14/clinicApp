@@ -1,9 +1,12 @@
 package ad.clinic.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,7 +19,10 @@ public class Patient {
     String firstName;
     String lastName;
     String password;
-    String role;  
+    String role; 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_data_id", referencedColumnName = "id")
+    private PatientData patientData;
    
     //String note; 
 
@@ -63,6 +69,13 @@ public class Patient {
     }
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public PatientData getPatientData() {
+        return patientData;
+    }
+    public void setPatientData(PatientData patientData) {
+        this.patientData = patientData;
     }
  
 }

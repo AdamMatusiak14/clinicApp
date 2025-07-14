@@ -4,6 +4,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <include file="001_create_table_doctor.xml" relativeToChangelogFile="true" />
     <include file="002_create_table_patient.xml" relativeToChangelogFile="true" />
+    <include file="003_create_table_survey.xml" relativeToChangelogFile="true" />
     <include file="testdata/001_doctors.xml" relativeToChangelogFile="true" />
 
 
