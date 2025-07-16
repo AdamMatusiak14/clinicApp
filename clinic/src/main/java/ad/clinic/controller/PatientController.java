@@ -8,17 +8,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ad.clinic.DTO.PatientDTO;
 import ad.clinic.model.Patient;
 import ad.clinic.service.PatientService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") // Allow requests from the frontend
 @RequestMapping("/patient")
-public class PatientConntroller {
+public class PatientController {
 
     PatientService patientService;
 
-   public PatientConntroller(PatientService patientService) {
+   public PatientController(PatientService patientService) {
         this.patientService = patientService;
     }
 
@@ -33,5 +34,16 @@ public class PatientConntroller {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error registering patient: " + e.getMessage());
         }
     }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verifyPatient(@RequestBody PatientDTO patientDTO) { 
+
+       
+        boolean exists = patientService.verifyPatient(patientDTO);
+         return ResponseEntity.ok(exists);
+     
+
+      
     
+}
 }
