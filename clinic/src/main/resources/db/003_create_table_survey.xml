@@ -11,7 +11,7 @@
             </column>
             <column name="age" type="INT" />
             <column name="sex" type="VARCHAR(100)" />
-            <column name="takingMedication" type="VARCHAR(200)" />
+            <column name="taking_medication" type="VARCHAR(200)" />
             <column name="past_illnesses" type="VARCHAR(100)" />
             <column name="chronic_diseases" type="VARCHAR(100)" />
             <column name="vaccinations" type="VARCHAR(100)" />

@@ -1,11 +1,17 @@
 package ad.clinic.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -13,29 +19,42 @@ import jakarta.persistence.Table;
 @Table(name = "patient")
 public class Patient {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String firstName;
-    String lastName;
-    String password;
-    String role; 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_data_id", referencedColumnName = "id")
-    private PatientData patientData;
-   
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        Long id;
+        String firstName;
+        String lastName;
+        String password;
+        String role; 
+        @Column(name = "info_patient")
+        String infoPatient;
+        
+        @OneToOne(cascade = CascadeType.ALL)
+        @JoinColumn(name = "patient_data_id", referencedColumnName = "id")
+        private PatientData patientData;
+
+        @OneToMany(mappedBy = "patient")
+        private List<Visit> visits = new ArrayList<>(); // Assuming a Visit class exists for patient visits
+        @OneToMany (mappedBy = "patient")
+        private List<Prescription> prescriptions = new ArrayList<>(); // Assuming a Prescription class exists for patient prescriptions
+       
+
+
     //String note; 
 
     public Patient() {
     }
 
-    public Patient(Long id, String firstName, String lastName, String password, String role) {
+    public Patient(Long id, String firstName, String lastName, String password, String role, PatientData patientData, List<Visit> visits, List<Prescription> prescriptions, String infoPatient) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.role = role;
-     
+        this.patientData = patientData;
+        this.visits = visits;
+        this.prescriptions = prescriptions;  
+        this.infoPatient = infoPatient;
     
     }
 
@@ -77,5 +96,30 @@ public class Patient {
     public void setPatientData(PatientData patientData) {
         this.patientData = patientData;
     }
+
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
+    }
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
+    }
+
  
+
+    public String getInfoPatient() {
+        return infoPatient;
+    }
+    public void setInfoPatient(String infoPatient) {
+        this.infoPatient = infoPatient;
+    }
+
+   
+
 }

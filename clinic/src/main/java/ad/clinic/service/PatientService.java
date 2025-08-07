@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ad.clinic.DTO.PatientDTO;
 import ad.clinic.model.Patient;
+import ad.clinic.model.PatientData;
 import ad.clinic.repository.PatientRepository;
 
 @Service
@@ -25,16 +26,39 @@ public class PatientService {
         patientRepository.save(patient);
     }
 
-    public boolean verifyPatient(PatientDTO patientDTO) {
+    public Patient verifyPatient(PatientDTO patientDTO) {
         // Sprawdza w bazie danych czy taki uzytkownik istnieje
         String firstName = patientDTO.getFirstName();
         String lastName = patientDTO.getLastName();
         Optional <Patient> optionalPatient = patientRepository.findByFirstNameAndLastName(firstName, lastName);
         if (optionalPatient.isPresent()) {
-            return true; // Pacjent istnieje
+            Patient patient = optionalPatient.get();
+            return patient; // Pacjent istnieje
         } else {
-            return false; // Pacjent nie istnieje
+            return null; // Pacjent nie istnieje
         }
+    }
+
+    public Patient findPatient (PatientDTO patientDTO) {
+        String firstName = patientDTO.getFirstName();
+        String lastName = patientDTO.getLastName();
+        Optional<Patient> optionalPatient = patientRepository.findByFirstNameAndLastName(firstName, lastName);
+        if (optionalPatient.isPresent()) {
+            return optionalPatient.get(); // Pacjent istnieje
+        } else {
+            return null; // Pacjent nie istnieje
+        }
+       
+       
+       
+    }
+
+    public Patient findPatientById(Long id) {
+        return patientRepository.findById(id).orElse(null);
+    }   
+
+    public void savePatient(Patient patient) {
+        patientRepository.save(patient);
     }
     
 }

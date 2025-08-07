@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="004-testdata-1" author="ad">
+        <insert tableName="prescription">
+            <column name="patient_id" value="1" />
+            <column name="doctor_id" value="1" />
+            <column name="issue_date" valueDate="2023-10-01" />
+            <column name="code" value="RX12345" />
+            <column name="medicine" value="Paracetamol" />
+        </insert>
+
+        <insert tableName="prescription">
+            <column name="patient_id" value="2" />
+            <column name="doctor_id" value="2" />
+            <column name="issue_date" valueDate="2025-11-02" />
+            <column name="code" value="RG54321" />
+            <column name="medicine" value="Ibuprofen" />
+        </insert>
+
+
+        
+
+
+    </changeSet>
+</databaseChangeLog>

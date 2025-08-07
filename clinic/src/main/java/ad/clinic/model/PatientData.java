@@ -34,7 +34,7 @@ public class PatientData {
 
     PatientData(Long id, int age, String sex, String takingMedication, 
                 String pastIllnesses, String chronicDiseases, String vaccinations, 
-                String allergies, String familyHistory, String smoking, String alcohol) {
+                String allergies, String familyHistory, String smoking, String alcohol, Patient patient) {
         this.id = id;
         this.age = age; 
         this.sex = sex;
@@ -46,6 +46,7 @@ public class PatientData {
         this.familyHistory = familyHistory;
         this.smoking = smoking;
         this.alcohol = alcohol;
+        this.patient = patient;
     
 }
 
@@ -148,6 +149,8 @@ public class PatientData {
     public void setPatient(Patient patient) {
         this.patient = patient;
 }
+
+
 
 }
 

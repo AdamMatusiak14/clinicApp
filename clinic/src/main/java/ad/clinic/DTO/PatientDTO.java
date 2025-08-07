@@ -2,6 +2,7 @@ package ad.clinic.DTO;
 
 public class PatientDTO {
     
+    private Long id;
     private String firstName;
     private String lastName;
 
@@ -10,7 +11,7 @@ public class PatientDTO {
         return firstName;
     }
 
-    public void setFistName(String firstName) {
+    public void setFirstName(String firstName) {
       this.firstName = firstName;
     }
 
@@ -19,6 +20,13 @@ public class PatientDTO {
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
 
