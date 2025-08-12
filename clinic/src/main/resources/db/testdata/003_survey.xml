@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="003-testdata-1" author="ad">
+        <insert tableName="survey">
+            <column name="age" value="300" />
+            <column name="sex" value="men"/>
+            <column name="taking_medication" value="none"/>
+            <column name="past_illnesses" value="none"/>
+            <column name="chronic_diseases" value="none"/>
+            <column name="vaccinations" value="all"/>
+            <column name="allergies" value="none"/>
+            <column name="family_history" value="none"/> 
+            <column name="smoking" value="none"/>
+            <column name="alcohol" value="none"/>  
+                 
+            
+        </insert>
+
+         <insert tableName="survey">
+            <column name="age" value="200" />
+            <column name="sex" value="men"/>
+            <column name="taking_medication" value="none"/>
+            <column name="past_illnesses" value="rabies"/>
+            <column name="chronic_diseases" value="none"/>
+            <column name="vaccinations" value="all"/>
+            <column name="allergies" value="none"/>
+            <column name="family_history" value="none"/> 
+            <column name="smoking" value="none"/>
+            <column name="alcohol" value="none"/>  
+                 
+            
+        </insert>
+
+
+         
+
+
+
+        
+    </changeSet>
+</databaseChangeLog>

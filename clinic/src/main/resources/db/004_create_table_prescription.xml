@@ -4,20 +4,17 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
 
 
-    <changeSet id="0002" author="ad">
-        <createTable tableName="patient">
+    <changeSet id="0004" author="ad">
+        <createTable tableName="prescription">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" />
             </column>
-            <column name="first_name" type="VARCHAR(100)" />
-            <column name="last_name" type="VARCHAR(100)" />
-            <column name="password" type="VARCHAR(200)" />
-            <column name="role" type="VARCHAR(100)" />
-            <column name= "info_patient" type="VARCHAR(500)" />
-            <column name="patient_data_id" type="BIGINT"/>
-            <column name="patient_card_id" type="BIGINT"/>
-
-         
+            <column name="patient_id" type="INT" />
+            <column name="doctor_id" type="INT" />
+            <column name="issue_date" type="DATE" />
+            <column name="code" type="VARCHAR(100)" />
+            <column name="medicine" type="VARCHAR(100)" />
+           
          
         </createTable>
 

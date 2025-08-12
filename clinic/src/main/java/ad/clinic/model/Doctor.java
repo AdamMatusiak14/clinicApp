@@ -1,9 +1,14 @@
 package ad.clinic.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,11 +27,15 @@ public class Doctor {
     String specialist;
     String experience;
     String photoPath;
+    @OneToMany(mappedBy = "doctor")
+    private List<Prescription> prescriptions = new ArrayList<>(); // Assuming a Prescription class exists for doctor prescriptions
+    @OneToMany(mappedBy = "doctor")
+    List<Visit> visits = new ArrayList<>(); // Assuming a Visit class exists for doctor visits
 
     public Doctor() {
     }
 
-    public Doctor(Long id, String firstName, String lastName, String password, String role, int age, String specialist, String experience, String photoPath) {
+    public Doctor(Long id, String firstName, String lastName, String password, String role, int age, String specialist, String experience, String photoPath,List<Prescription> prescriptions, List<Visit> visits) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,6 +45,9 @@ public class Doctor {
         this.specialist = specialist;
         this.experience = experience;
         this.photoPath = photoPath;
+        this.prescriptions = prescriptions;
+        this.visits = visits;
+
     }
 
     public int getAge() {
@@ -92,5 +104,22 @@ public class Doctor {
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
     }
+
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
     
+}
+
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
+    }
+
 }

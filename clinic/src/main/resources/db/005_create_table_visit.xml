@@ -4,21 +4,17 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
 
 
-    <changeSet id="0002" author="ad">
-        <createTable tableName="patient">
+    <changeSet id="0005" author="ad">
+        <createTable tableName="visit">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" />
             </column>
-            <column name="first_name" type="VARCHAR(100)" />
-            <column name="last_name" type="VARCHAR(100)" />
-            <column name="password" type="VARCHAR(200)" />
-            <column name="role" type="VARCHAR(100)" />
-            <column name= "info_patient" type="VARCHAR(500)" />
-            <column name="patient_data_id" type="BIGINT"/>
-            <column name="patient_card_id" type="BIGINT"/>
-
-         
-         
+            <column name="time" type="TIME" />
+            <column name="date" type="DATE" />
+            <column name="info" type="VARCHAR(100)" />
+            <column name="doctor_id" type="INT" />
+            <column name="patient_id" type="INT" />
+               
         </createTable>
 
     </changeSet>
