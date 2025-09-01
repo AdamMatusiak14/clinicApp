@@ -1,0 +1,35 @@
+.patient-menu-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center
+}
+
+.patient-menu-link {
+  display: inline-block;
+  background: orange;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  transition: background 0.2s, color 0.2s;
+  width: 240px;
+    text-align: center;
+}
+
+.patient-menu-link:hover {
+  background: #ff9800;
+  color: #222;
+}
+
+.patient-menu-title {
+  text-align: center;
+  margin-bottom: 24px;
+  color:#fff;
+  
+}
