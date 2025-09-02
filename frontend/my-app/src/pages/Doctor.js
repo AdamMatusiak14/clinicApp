@@ -8,7 +8,7 @@ function Doctors() {
   useEffect(() => {
     axios.get("http://localhost:8080/api/doctors")
     .then((response) => {
-      console.log(response.data); // sprawdź co zwraca backend
+      console.log("To przychodzi z backendu", response.data); // sprawdź co zwraca backend
       setDoctors(response.data);  // ustaw dane w stanie
     })
     .catch((error) => {

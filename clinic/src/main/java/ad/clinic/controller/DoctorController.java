@@ -1,11 +1,13 @@
-package ad.clinic.controller;
+ package ad.clinic.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import ad.clinic.DTO.DoctorDTO;
 import ad.clinic.model.Doctor;
 import ad.clinic.service.DoctorService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
@@ -27,8 +29,22 @@ public class DoctorController {
     }
 
     @GetMapping("/doctors")
-    public List<Doctor> getAllDoctors() {
+    public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
         System.out.println("To jest metoda getAllDoctors w DoctorController");
-        return doctorService.getAllDoctors();
+        
+        List<Doctor> doctors =  doctorService.getAllDoctors();
+
+        List<DoctorDTO> doctorsDTO = doctors.stream().map(doctor -> new DoctorDTO(
+            doctor.getFirstName(),
+            doctor.getLastName(),
+            doctor.getPassword(),
+            doctor.getRole(),
+            doctor.getAge(),
+            doctor.getSpecialist(),
+            doctor.getExperience(),
+            doctor.getPhotoPath()
+        )).toList();
+
+        return ResponseEntity.ok(doctorsDTO);
     }
 }
