@@ -3,6 +3,7 @@
 import org.springframework.web.bind.annotation.RestController;
 
 import ad.clinic.DTO.DoctorDTO;
+import ad.clinic.DTO.DoctorNameDTO;
 import ad.clinic.model.Doctor;
 import ad.clinic.service.DoctorService;
 
@@ -47,4 +48,20 @@ public class DoctorController {
 
         return ResponseEntity.ok(doctorsDTO);
     }
+
+
+    @GetMapping("/doctors/names")
+    ResponseEntity <List<DoctorNameDTO>> getAllDoctorNames() {
+
+    List<Doctor> doctors = doctorService.getAllDoctors();
+
+    List<DoctorNameDTO> doctorNamesDTO = doctors.stream().map(doctor -> new DoctorNameDTO(
+        doctor.getId(),
+        doctor.getFirstName(),
+        doctor.getLastName()
+    )).toList();
+
+    return ResponseEntity.ok(doctorNamesDTO);
+    }
+      
 }

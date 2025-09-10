@@ -78,9 +78,10 @@ public class Visit {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
+    public void setDoctor(Doctor doctor) { 
         this.doctor = doctor;
     }
+
 
     public Patient getPatient() {
         return patient;

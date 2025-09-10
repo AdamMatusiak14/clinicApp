@@ -60,5 +60,14 @@ public class PatientService {
     public void savePatient(Patient patient) {
         patientRepository.save(patient);
     }
+
+    public Patient findPatientByfirstNameAndLastName(String firstName, String lastName) {
+        Optional<Patient> optionalPatient = patientRepository.findByFirstNameAndLastName(firstName, lastName);
+        if (optionalPatient.isPresent()) {
+            return optionalPatient.get(); // Pacjent istnieje
+        } else {
+            return null; // Pacjent nie istnieje
+        }
+    }
     
 }

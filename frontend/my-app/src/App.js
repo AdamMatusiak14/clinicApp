@@ -10,6 +10,7 @@ import DataPatient from './pages/DataPatient';
 import Verfication from './pages/Verfication';
 import PatientCard from './pages/PatientCard';
 import FindPatient from './pages/FindPatient';  
+import Visits from './pages/Visits';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/verfication" element={<Verfication/>} />
           <Route path="/patientCard" element={<PatientCard/>} />
           <Route path="/findPatient" element={<FindPatient/>} />
+          <Route path="/visits" element={<Visits/>} />
          
     
         </Routes>

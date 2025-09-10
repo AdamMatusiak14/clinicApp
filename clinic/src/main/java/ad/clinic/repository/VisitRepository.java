@@ -13,5 +13,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     // Define custom query methods if needed
 public List<Visit> findByPatientId(Long id);
     // Example: List<Visit> findByPatientId(Long patientId);
+
+public List<Visit> findByDoctorIdAndDate(Long doctorId, java.time.LocalDate date);     
     
 } 

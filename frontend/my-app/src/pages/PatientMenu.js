@@ -11,7 +11,7 @@ function PatientMenu() {
           <li><Link className= "patient-menu-link" to="/registration">Rejestracja</Link></li>
           <li><Link className= "patient-menu-link" to="/verfication">Ankieta</Link></li>
           <li><Link className= "patient-menu-link" to="/findPatient">Karta Pacjenta</Link></li>
-          <li><Link className= "patient-menu-link" to="/appointments">Wizyty</Link></li>
+          <li><Link className= "patient-menu-link" to="/visits">Wizyty</Link></li>
         </ul>
       </nav>
       <Outlet /> {/* Tu będą wyświetlane podstrony */}
