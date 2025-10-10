@@ -11,6 +11,8 @@ import Verfication from './pages/Verfication';
 import PatientCard from './pages/PatientCard';
 import FindPatient from './pages/FindPatient';  
 import Visits from './pages/Visits';
+import Assistant from './pages/Assistant';
+
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
           <Route path="/patientCard" element={<PatientCard/>} />
           <Route path="/findPatient" element={<FindPatient/>} />
           <Route path="/visits" element={<Visits/>} />
+          <Route path="/assistent" element={<Assistant/>} />
          
     
         </Routes>
