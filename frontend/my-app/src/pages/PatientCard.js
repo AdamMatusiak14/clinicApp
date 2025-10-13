@@ -44,7 +44,7 @@ function PatientCard() {
   const handleVisits = () => {
     const patientId = Number(sessionStorage.getItem("patientId"));
     axios
-      .post("http://localhost:8080/visit/findById", null, {
+      .post("http://localhost:8080/api/visit/findById", null, {
         params: { patientId }
   }).then((res) => {
     setVisits(res.data);

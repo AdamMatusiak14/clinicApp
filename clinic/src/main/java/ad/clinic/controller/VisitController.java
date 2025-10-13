@@ -42,7 +42,7 @@ public class VisitController {
 
     
     @PostMapping("/findById")
-    ResponseEntity <List<VisitDTO>> findVisitById(@RequestParam Long patientId) { // Stwórz tabelę Visits
+    ResponseEntity <List<VisitDTO>> findVisitById(@RequestParam Long patientId) { 
 
         System.out.println("Jestem VisitController");
 
@@ -65,8 +65,7 @@ public class VisitController {
         }
 
 
-        // Logic to find visit by ID
-        // This is a placeholder, actual implementation will depend on VisitService methods
+        
         return ResponseEntity.ok(visitDTO); // Return the found visit DTO
     }
 
