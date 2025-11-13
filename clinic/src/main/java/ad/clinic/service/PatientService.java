@@ -3,9 +3,12 @@ package ad.clinic.service;
 import java.lang.StackWalker.Option;
 import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import ad.clinic.DTO.PatientDTO;
+import ad.clinic.DTO.patientDTO.PatientCredentailMapperDTO;
+import ad.clinic.DTO.patientDTO.PatientCredentialDTO;
 import ad.clinic.model.Patient;
 import ad.clinic.model.PatientData;
 import ad.clinic.repository.PatientRepository;
@@ -70,4 +73,8 @@ public class PatientService {
         }
     }
     
+
+   public Optional<Patient> findPatientByUsername(String username) {
+       return patientRepository.findPatientByEmail(username);  
+    }
 }

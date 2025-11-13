@@ -1,9 +1,13 @@
 package ad.clinic.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import ad.clinic.DTO.doctorDTO.DoctorCredentialDTO;
+import ad.clinic.DTO.doctorDTO.DoctorCredentialMapperDTO;
 import ad.clinic.model.Doctor;
 import ad.clinic.repository.DoctorRepository;
 
@@ -34,6 +38,11 @@ public class DoctorService {
         doctorRepository.deleteById(id);
     }   
 
+    public Optional <Doctor> findDoctorByUsername(String username) {
+       return doctorRepository.findDoctorByEmail(username);  
+
+        }
+       
     
     
 }

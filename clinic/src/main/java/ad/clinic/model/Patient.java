@@ -22,6 +22,7 @@ public class Patient {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         Long id;
+        String email;
         String firstName;
         String lastName;
         String password;
@@ -45,8 +46,9 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(Long id, String firstName, String lastName, String password, String role, PatientData patientData, List<Visit> visits, List<Prescription> prescriptions, String infoPatient) {
+    public Patient(Long id, String email, String firstName, String lastName, String password, String role, PatientData patientData, List<Visit> visits, List<Prescription> prescriptions, String infoPatient) {
         this.id = id;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -118,6 +120,14 @@ public class Patient {
     }
     public void setInfoPatient(String infoPatient) {
         this.infoPatient = infoPatient;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
    

@@ -14,6 +14,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     
     Optional<Patient> findByFirstNameAndLastName(String firstName, String lastName);
     Optional<Patient> findByfirstNameAndLastName(String firstName, String lastName);
+    Patient findByFirstName(String firstName);
+    Optional<Patient> findPatientByEmail(String username);
     
     // Add any other necessary query methods here
    

@@ -9,8 +9,8 @@ function PatientMenu() {
       <nav>
         <ul className="patient-menu-list">
           <li><Link className= "patient-menu-link" to="/registration">Rejestracja</Link></li>
-          <li><Link className= "patient-menu-link" to="/verfication">Ankieta</Link></li>
-          <li><Link className= "patient-menu-link" to="/findPatient">Karta Pacjenta</Link></li>
+          <li><Link className= "patient-menu-link" to="/login">Ankieta</Link></li>
+          <li><Link className= "patient-menu-link" to="/login">Karta Pacjenta</Link></li>
           <li><Link className= "patient-menu-link" to="/visits">Wizyty</Link></li>
         </ul>
       </nav>

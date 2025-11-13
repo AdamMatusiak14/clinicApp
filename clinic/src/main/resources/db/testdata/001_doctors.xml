@@ -4,10 +4,11 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="001-testdata-1" author="ad">
         <insert tableName="doctor">
+            <column name="email" value="pawel@clinic.com" />
             <column name="first_name" value="Pawel" />
             <column name="last_name" value="Wiktorczyk" />
-            <column name="password" value="paw" />
-            <column name="role" value= "doctor" />
+            <column name="password" value="$2a$12$Wk39duobKhws6jDDcy8lnuvTCrFf9o8vp0IltaaAj8I0OBAKU30bq" /> <!-- password: wikt -->
+            <column name="role" value= "DOCTOR" />
              <column name="age" value="35" />
             <column name="specialist" value= "internist" />
              <column name="experience" value= "middle" />       
@@ -15,10 +16,11 @@
         </insert>
 
          <insert tableName="doctor">
+              <column name="email" value="anna@clinic.com" />
             <column name="first_name" value="Anna" />
             <column name="last_name" value="Krawczyk" />
-            <column name="password" value="kraw" />
-            <column name="role" value= "doctor" />
+            <column name="password" value="$2a$12$TcCXMkRZpeoe52JIoxXGOOCJn45KR/ihXl0ov2R4pv2IPEUFowkaC" /> <!--kraw-->
+            <column name="role" value= "DOCTOR" />
              <column name="age" value="43" />
             <column name="specialist" value= "pediatrician" />
              <column name="experience" value= "high" />

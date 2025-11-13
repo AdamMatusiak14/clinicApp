@@ -4,10 +4,11 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="002-testdata-1" author="ad">
         <insert tableName="patient">
+            <column name="email" value="rob@clinic.com" />
             <column name="first_name" value="Robute" />
             <column name="last_name" value="Guiliman" />
-            <column name="password" value="robu" />
-            <column name="role" value= "ROLE_PATIENT" />
+            <column name="password" value="$2a$12$zd9F8sTOnnS5v.FQNipF6.84IwLf8BTodZbWMm1FrEDVP1S9Xvi4e"/> <!--robu-->
+            <column name="role" value= "PATIENT" />
             <column name="info_patient" value="Proszez wziac ze soba dokumenty" />
             <column name="patient_data_id" value="1" />
             <column name="patient_card_id" value="1" />
@@ -15,10 +16,11 @@
         </insert>
 
          <insert tableName="patient">
+              <column name="email" value="lem@clinic.com" />
             <column name="first_name" value="Leman" />
             <column name="last_name" value="Russ" />
-            <column name="password" value="lema" />
-            <column name="role" value= "ROLE_PATIENT" />
+            <column name="password" value="$2a$12$lj6TDp.RPNYAkNFfNBTzFuZJycsk959Lazb6ntnLWzqVKgdreJ8Wa" /><!--lema-->
+            <column name="role" value= "PATIENT" />
             <column name="info_patient" value="Pańska wizyta została przełożona" />
             <column name="patient_data_id" value="2" />
             <column name="patient_card_id" value="2" />

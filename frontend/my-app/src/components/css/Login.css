@@ -1,13 +1,12 @@
-.verfication-container {
+.login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  justify-content: center; 
- 
+  justify-content: center;
 }
 
-.verfication-form {
+.login-form {
   background: #0c580c;
   padding: 32px;
   border-radius: 8px;
@@ -15,14 +14,14 @@
   min-width: 320px;
 }
 
-.verfication-form label {
+.login-form label {
   color: #FFD600;
   font-weight: bold;
   margin-bottom: 4px;
   display: block;
 }
 
-.verfication-form input {
+.login-form input {
   padding: 8px;
   margin-bottom: 16px;
   border-radius: 4px;
@@ -31,7 +30,7 @@
   box-sizing: border-box;
 }
 
-.verfication-form button {
+.login-form button {
   padding: 10px 20px;
   background: #FFD600;
   color: #222;
@@ -41,3 +40,8 @@
   cursor: pointer;
 }
 
+.login-form p {
+  color: #FFD600;
+  font-weight: bold;
+  text-align: center;
+}
