@@ -28,7 +28,7 @@ import ad.clinic.service.PrescriptionService;
 
 @CrossOrigin(origins = "http://localhost:3000") 
 @RestController
-@RequestMapping("/prescription") 
+@RequestMapping("/api/prescription") 
 public class PrescriptionController {
     
     private final PrescriptionService prescriptionService;

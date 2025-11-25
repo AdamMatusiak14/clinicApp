@@ -77,4 +77,9 @@ public class PatientService {
    public Optional<Patient> findPatientByUsername(String username) {
        return patientRepository.findPatientByEmail(username);  
     }
+
+    public Patient findPatientByEmail(String email) {
+        Optional<Patient> optionalPatient = patientRepository.findPatientByEmail(email);
+        return optionalPatient.orElse(null);
+    }
 }

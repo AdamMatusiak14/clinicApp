@@ -2,6 +2,9 @@ package ad.clinic.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +21,7 @@ import ad.clinic.service.PatientService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") // Allow requests from the frontend
-@RequestMapping("/patient")
+@RequestMapping("/api/patient") // Zmieniłeś adresy z api, ale to za mało
 public class PatientController {
 
     PatientService patientService;
@@ -94,8 +97,31 @@ public ResponseEntity<PatientCardDTO> getPatientCard(@RequestParam Long id) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }           
        
+
+    }
+
     
+@GetMapping("/current")
+public ResponseEntity<PatientCardDTO> getCurrentPatientCard(@AuthenticationPrincipal UserDetails userDetails){
+    System.out.println("Getting current patient from JWT: " + userDetails.getUsername());
+  
+    Patient patient = patientService.findPatientByEmail(userDetails.getUsername());
+    
+    if (patient != null) {
+        PatientCardDTO patientCardDTO = new PatientCardDTO();
+        patientCardDTO.setPatientId(patient.getId());
+        patientCardDTO.setName(patient.getFirstName());
+        patientCardDTO.setSurname(patient.getLastName());
+        patientCardDTO.setInfoPatient(patient.getInfoPatient());
+        
+        return ResponseEntity.ok(patientCardDTO);
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
 }
+
 }
+
+
 
 

@@ -28,7 +28,7 @@ const DataPatient = () => {
     e.preventDefault();
 
     axios
-      .post("http://localhost:8080/patient/survey/note", form)
+      .post("http://localhost:8080/api/patient/survey/note", form)
       .then((response) => {
         alert("Ankieta zostala zapisana: " + response.data);
         navigate("/patient");
