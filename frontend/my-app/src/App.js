@@ -18,11 +18,7 @@ import apiClient from './components/apiClient';
 
 function App() {
 
-// useEffect(() => {
-//     apiClient.get()
-//       .then(res => console.log(res.data))
-//       .catch(err => console.log(err));
-//   }, []);
+
 
   return (
  <Router>

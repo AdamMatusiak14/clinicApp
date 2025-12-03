@@ -7,6 +7,7 @@ const Registration = () => {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
+    email: "",
     password: "",
   });
 
@@ -19,7 +20,7 @@ const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8080/patient/register", form)  
+    axios.post("http://localhost:8080/api/patient/register", form)  
     .then((response) => {
       alert("Rejestracja zakończona sukcesem: " + response.data);  
       navigate("/patient"); // Redirect to login page after successful registration
@@ -48,6 +49,16 @@ const navigate = useNavigate();
           type="text"
           name="lastName"
           value={form.lastName}
+          onChange={handleChange}
+          required
+        />
+      </div>
+<div>
+       <label>Email:</label>
+        <input
+          type="text"
+          name="email"
+          value={form.email}
           onChange={handleChange}
           required
         />

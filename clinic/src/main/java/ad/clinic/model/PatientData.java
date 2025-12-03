@@ -70,7 +70,7 @@ public class PatientData {
         return  sex;
 }
 
-    public void setSex(){
+    public void setSex(String sex){
         this.sex = sex;
     }
 

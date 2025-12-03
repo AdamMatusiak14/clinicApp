@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../components/css/DataPatient.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../components/apiClient";
 
 const DataPatient = () => {
   const [form, setForm] = useState({
@@ -15,10 +15,26 @@ const DataPatient = () => {
     familyHistory: "",
     smoking: "",
     alcohol: "",
-    patient: {id:localStorage.getItem("patientId")},
-  });
+   });
 
+  const [patientCard, setPatientCard] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setLoading(true);
+    apiClient
+      .get("/patient/current")
+      .then((res) => {
+               setPatientCard(res.data);
+      
+      })
+      .catch((err) => {
+        console.error("Error fetching current patient:", err);
+        if (err?.response?.status === 401) navigate("/login");
+      })
+      .finally(() => setLoading(false));
+  }, [navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,20 +43,34 @@ const DataPatient = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios
-      .post("http://localhost:8080/api/patient/survey/note", form)
+   
+
+      apiClient
+      .put("/patient/survey/note", form)
       .then((response) => {
         alert("Ankieta zostala zapisana: " + response.data);
         navigate("/patient");
       })
       .catch((error) => {
-        alert("Błąd zapisu ankiety: " + error.message);
+        alert("Błąd zapisu ankiety: " + (error.message || error));
       });
   };
 
+  if (loading) return <div className="datapatient-container">Ładowanie danych pacjenta...</div>;
+  if (!patientCard) return <div className="datapatient-container">Nie zweryfikowano pacjenta.</div>;
+
   return (
     <div className="datapatient-container">
+      <div className="patient-verified">
+   
+         <strong className="patient-label">Zalogowany pacjent:</strong>
++        <span className="patient-name">{patientCard.name} {patientCard.surname}</span>
+      </div>
+
       <form onSubmit={handleSubmit} className="datapatient-form">
+        {/* ukryte id pacjenta (ustawione z /patient/current) */}
+   
+
         <div>
           <label>Wiek:</label>
           <input
@@ -92,7 +122,7 @@ const DataPatient = () => {
           <label>Szczepienia:</label>
           <input
             type="text"
-            name="vaccinations"  
+            name="vaccinations"
             value={form.vaccinations}
             onChange={handleChange}
           />
@@ -139,4 +169,4 @@ const DataPatient = () => {
   );
 };
 
-export default DataPatient;  
+export default DataPatient;

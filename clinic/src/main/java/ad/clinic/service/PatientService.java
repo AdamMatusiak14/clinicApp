@@ -4,6 +4,7 @@ import java.lang.StackWalker.Option;
 import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ad.clinic.DTO.PatientDTO;
@@ -17,15 +18,19 @@ import ad.clinic.repository.PatientRepository;
 public class PatientService {
 
    private PatientRepository patientRepository;
+   private PasswordEncoder  passwordEncoder;
 
-   public PatientService(PatientRepository patientRepository) {
+   public PatientService(PatientRepository patientRepository, PasswordEncoder  passwordEncoder) {
         this.patientRepository = patientRepository;
+        this.passwordEncoder = passwordEncoder;
     }   
 
 
 
    public void registerPatient(Patient patient) {
-        patient.setRole("ROLE_PATIENT");
+        patient.setRole("PATIENT");
+        String encodedPassword = passwordEncoder.encode(patient.getPassword());
+        patient.setPassword(encodedPassword);
         patientRepository.save(patient);
     }
 
@@ -56,9 +61,11 @@ public class PatientService {
        
     }
 
-    public Patient findPatientById(Long id) {
+      
+
+    public Patient findById(Long id) {
         return patientRepository.findById(id).orElse(null);
-    }   
+    } 
 
     public void savePatient(Patient patient) {
         patientRepository.save(patient);
@@ -82,4 +89,12 @@ public class PatientService {
         Optional<Patient> optionalPatient = patientRepository.findPatientByEmail(email);
         return optionalPatient.orElse(null);
     }
+
+    public Patient findByUsername(String username) {  // Tu jest problem odpal i zobacz
+        return patientRepository.findPatientByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Patient not found with username: " + username));
+    }   
+
+
+    
 }

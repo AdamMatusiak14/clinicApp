@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +26,11 @@ import ad.clinic.service.PatientService;
 public class PatientController {
 
     PatientService patientService;
+ 
 
    public PatientController(PatientService patientService) {
         this.patientService = patientService;
+      
     }
 
 
@@ -83,7 +86,7 @@ public class PatientController {
 @GetMapping("/card") 
 public ResponseEntity<PatientCardDTO> getPatientCard(@RequestParam Long id) {
     System.out.println("Fetching patient card for ID: " + id);
-    Patient patient = patientService.findPatientById(id);
+    Patient patient = patientService.findById(id);
     
     if (patient != null) {
         PatientCardDTO patientCardDTO = new PatientCardDTO();
@@ -119,6 +122,8 @@ public ResponseEntity<PatientCardDTO> getCurrentPatientCard(@AuthenticationPrinc
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 }
+
+
 
 }
 

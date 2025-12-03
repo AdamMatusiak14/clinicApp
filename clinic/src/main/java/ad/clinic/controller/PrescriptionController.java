@@ -55,7 +55,7 @@ public class PrescriptionController {
         while(iteratorPrescription.hasNext()){
             Prescription prescription = iteratorPrescription.next();
 
-            Patient patient = patientService.findPatientById(patientId);
+            Patient patient = patientService.findById(patientId);
            Long doctorId = prescription.getDoctor().getId();
            Doctor doctor = doctorService.getDoctorById(doctorId);
 

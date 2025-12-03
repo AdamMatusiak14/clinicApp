@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import ad.clinic.DTO.PatientDTO;
 import ad.clinic.model.Patient;
+import java.util.List;
+
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
@@ -16,6 +18,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     Optional<Patient> findByfirstNameAndLastName(String firstName, String lastName);
     Patient findByFirstName(String firstName);
     Optional<Patient> findPatientByEmail(String username);
+   
+
     
     // Add any other necessary query methods here
    

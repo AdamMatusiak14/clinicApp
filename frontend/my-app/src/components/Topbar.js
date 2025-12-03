@@ -27,7 +27,7 @@ import "./css/Topbar.css";
         ) : (
           <>
           <button className="login-btn" onClick={() => navigate("/login")}>Login</button>
-          <button className="register-btn" onClick={() => navigate("/register")}>Register</button>
+          <button className="register-btn" onClick={() => navigate("/registration")}>Register</button>
          </>
         )}
      

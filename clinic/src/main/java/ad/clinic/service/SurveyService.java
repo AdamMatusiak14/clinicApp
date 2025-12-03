@@ -1,5 +1,7 @@
 package ad.clinic.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import ad.clinic.model.PatientData;
@@ -14,9 +16,14 @@ public class SurveyService {
         this.surveyRepository = surveyRepository;
     }
 
-    public String saveSurveyNote(PatientData note) {
-       surveyRepository.save(note);
+    public String saveSurveyNote(PatientData record) {
+       surveyRepository.save(record);
         return "Zapisano poprawnie";
     }
+
+    public PatientData getSurveyByID(Long id) {
+       return surveyRepository.findById(id).orElseThrow(() -> new RuntimeException("Survey not found"));
+      
     
+}
 }

@@ -54,3 +54,26 @@
   overflow-y: auto;
 }
 
+/* ...existing code... */
+.patient-verified{
+  display: inline-block;
+  background: #fff7ef; /* subtle warm background */
+  border: 2px solid #ff9800; /* orange border */
+  color: #ff6f00; /* orange text */
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 1.15rem; /* slightly larger */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.patient-verified .patient-label{
+  font-weight: 700;
+  margin-right: 8px;
+  color: #e65100;
+}
+
+.patient-verified .patient-name{
+  font-weight: 600;
+  color: #bf360c;
+}
+/* ...existing code... */
