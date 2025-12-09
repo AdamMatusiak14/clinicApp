@@ -1,0 +1,177 @@
+/* DoctorPanel.css
+   Styl w podobnym schemacie kolorystycznym jak PatientCard.css
+*/
+
+.doctor-panel {
+  min-height: 100vh;
+  padding: 24px;
+  background: #001f4d;
+  color: #0b330b;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Header */
+.doctor-panel > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+ 
+}
+
+.doctor-panel h2 {
+  margin: 0;
+  color:#ffd600;
+  font-size: 1.5rem;
+  letter-spacing: 0.2px;
+}
+
+/* Tabs */
+.doctor-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  
+}
+
+.doctor-tabs button {
+  background: #0c580c;
+  color: #ffd600;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  box-shadow: 0 2px 6px rgba(8, 60, 8, 0.08);
+}
+
+.doctor-tabs button:hover {
+  transform: translateY(-2px);
+}
+
+.doctor-tabs button.active {
+  background: linear-gradient(180deg, #095a09 0%, #0c580c 100%);
+  box-shadow: 0 6px 16px rgba(8, 60, 8, 0.14);
+}
+
+/* Content area */
+.doctor-content {
+  background: #d46f2b;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 20px rgba(6, 30, 6, 0.06);
+}
+
+/* Cards header (title + expand button) */
+.cards-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cards-header h3 {
+  margin: 0;
+  color: #083b08;
+  font-size: 1.15rem;
+}
+
+/* Expand/Collapse button */
+.cards-header > button {
+  background: transparent;
+  border: 2px solid #0c580c;
+  color: #0c580c;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cards-header > button:hover {
+  background: #f0fff0;
+}
+
+/* Patients list */
+.patients-list {
+  padding: 8px 4px;
+  border-radius: 8px;
+  background: #d46f2b;
+  border: 1px solid rgba(12, 88, 12, 0.06);
+}
+
+.patients-list p {
+  margin: 8px 0;
+  color: #2e4b2e;
+}
+
+/* List styling */
+.patients-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.patients-list li {
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffd600;
+  border: 1px solid rgba(8, 60, 8, 0.04);
+  transition: box-shadow 120ms ease, transform 120ms ease;
+}
+
+.patients-list li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(8, 60, 8, 0.06);
+}
+
+/* Link style */
+.patients-list li a {
+  text-decoration: none;
+  color: #083b08;
+  font-weight: 600;
+}
+
+.patients-list li a:hover {
+  text-decoration: underline;
+  color: #0c580c;
+}
+
+/* Small metadata (e.g., patient id, short note) */
+.patients-list .meta {
+  font-size: 0.9rem;
+  color: #577a57;
+}
+
+/* Responsive: make list denser on small screens */
+@media (max-width: 640px) {
+  .doctor-panel {
+    padding: 12px;
+  }
+
+  .doctor-tabs {
+    flex-wrap: wrap;
+  }
+
+  .patients-list li {
+    padding: 8px;
+  }
+
+  .cards-header h3 {
+    font-size: 1rem;
+  }
+}
+
+/* Focus styles for accessibility */
+.doctor-tabs button:focus,
+.cards-header > button:focus,
+.patients-list li a:focus {
+  outline: 3px solid rgba(255, 214, 0, 0.28);
+  outline-offset: 2px;
+}

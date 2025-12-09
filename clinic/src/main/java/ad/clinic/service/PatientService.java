@@ -1,6 +1,8 @@
 package ad.clinic.service;
 
 import java.lang.StackWalker.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -94,6 +96,19 @@ public class PatientService {
         return patientRepository.findPatientByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Patient not found with username: " + username));
     }   
+
+    public List<PatientDTO> getAllPatients() {
+        Iterable<Patient> patients = patientRepository.findAll();
+        List<PatientDTO> patientDTOs = new ArrayList<>();
+        for (Patient patient : patients) {
+            PatientDTO dto = new PatientDTO();
+            dto.setId(patient.getId());
+            dto.setFirstName(patient.getFirstName());
+            dto.setLastName(patient.getLastName());
+            patientDTOs.add(dto);
+        }
+        return patientDTOs;
+    }
 
 
     

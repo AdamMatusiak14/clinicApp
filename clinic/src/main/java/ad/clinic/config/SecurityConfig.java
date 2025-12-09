@@ -67,8 +67,10 @@ public class SecurityConfig {
             .requestMatchers("/uploads/**").permitAll()
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers("/api/patient/register").permitAll()
-            .requestMatchers("/api/patient/**").hasRole("PATIENT")
+            .requestMatchers("/api/patient/**").hasAnyRole("PATIENT", "DOCTOR")
             .requestMatchers("/api/prescription/findById").hasRole("PATIENT")
+            .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
+           
            // .requestMatchers("/api/patient/survey").hasRole("PATIENT")
             //.requestMatchers("/ws/**/**").permitAll()
             .anyRequest().authenticated()

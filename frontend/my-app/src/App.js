@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect } from 'react';
 import Menu from "./components/Menu";
 import Doctor from "./pages/Doctor";
+import DoctorPanel from "./pages/DoctorPanel";
 import PatientMenu from "./pages/PatientMenu";
 import Registration from './pages/Registration';
 import DataPatient from './pages/DataPatient';
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<Menu/>} />
           <Route path="/patient" element={<PatientMenu/>} />
           <Route path="/doctor" element={<Doctor/>} />
+          <Route path="/doctorPanel" element={<DoctorPanel/>} />
           <Route path="/registration" element={<Registration/>} />
           <Route path="/survey" element={<DataPatient/>} />
           <Route path="/patientCard" element={<PatientCard/>} />

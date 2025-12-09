@@ -9,8 +9,11 @@ import ad.clinic.service.DoctorService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.security.Principal;
 import java.util.List;
 
 
@@ -64,4 +67,12 @@ public class DoctorController {
     return ResponseEntity.ok(doctorNamesDTO);
     }
       
+
+    @GetMapping("/doctor/panel")
+   // @PreAuthorize("hasRole('DOCTOR')")
+    public ResponseEntity<?> getDoctorPanel(Principal principal) {
+            String username = principal.getName();  
+            System.out.println("Authenticated doctor username: " + username);
+        return ResponseEntity.ok("Welcome to the Doctor's Panel!");
+    }
 }

@@ -1,5 +1,7 @@
 package ad.clinic.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,6 +46,13 @@ public class PatientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error registering patient: " + e.getMessage());
         }
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PatientDTO>> getAllPatients() {
+        List<PatientDTO> patients = patientService.getAllPatients();
+        return ResponseEntity.ok(patients);
+    }
+
 
     @PostMapping("/verify")
     public ResponseEntity<Patient> verifyPatient(@RequestBody PatientDTO patientDTO) { 
