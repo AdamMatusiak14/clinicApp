@@ -17,21 +17,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ad.clinic.DTO.patientDTO.PatientDoctorCardDTO;
 import ad.clinic.DTO.PatientCardDTO;
 import ad.clinic.DTO.PatientDTO;
 import ad.clinic.model.Patient;
+import ad.clinic.model.PatientData;
 import ad.clinic.service.PatientService;
+import ad.clinic.service.SurveyService;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") // Allow requests from the frontend
-@RequestMapping("/api/patient") // Zmieniłeś adresy z api, ale to za mało
+@RequestMapping("/api/patient") 
 public class PatientController {
 
     PatientService patientService;
+    SurveyService surveyService;
  
 
-   public PatientController(PatientService patientService) {
+   public PatientController(PatientService patientService, SurveyService surveyService) {
         this.patientService = patientService;
+        this.surveyService = surveyService;
       
     }
 
@@ -72,6 +78,7 @@ public class PatientController {
     @PostMapping("/find")
     public ResponseEntity<PatientDTO> findPatient(@RequestBody PatientDTO patientDTO){ 
           Patient patient = patientService.findPatient(patientDTO); // patientRepository.findByFirstNameAndLastName(firstName, lastName);
+        
 
           PatientDTO DTOPatient = new PatientDTO();
           DTOPatient.setId(patient.getId());
@@ -131,6 +138,46 @@ public ResponseEntity<PatientCardDTO> getCurrentPatientCard(@AuthenticationPrinc
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 }
+
+@GetMapping("/doctorCard")
+public ResponseEntity<PatientDoctorCardDTO> getPatientCardForDoctor(@RequestParam("id") Long id) { 
+    System.out.println("Fetching patient card for doctor, patient ID: " + id); // jest 
+    Patient patient = patientService.findById(id);
+    System.out.println("Found patient: " + (patient != null ? patient.getFirstName() + " " + patient.getLastName() : "null"));
+     PatientData survey = surveyService.getSurveyByID(patient.getPatientData().getId());
+     System.out.println("Found survey data: " + (survey != null ? "exists" : "null"));
+    
+    if (patient != null) {
+        PatientDoctorCardDTO patientDoctorCardDTO = new PatientDoctorCardDTO();
+        
+        patientDoctorCardDTO.setId(patient.getId());
+        patientDoctorCardDTO.setFirstName(patient.getFirstName());
+        patientDoctorCardDTO.setLastName(patient.getLastName());
+        patientDoctorCardDTO.setInfoPatient(patient.getInfoPatient()); 
+        patientDoctorCardDTO.setAge(survey.getAge());
+        patientDoctorCardDTO.setSex(survey.getSex());
+        patientDoctorCardDTO.setTakingMedication(survey.getTakingMedication());
+        patientDoctorCardDTO.setPastIllnesses(survey.getPastIllnesses());
+        patientDoctorCardDTO.setChronicDiseases(survey.getChronicDiseases());
+        patientDoctorCardDTO.setVaccinations(survey.getVaccinations());
+        patientDoctorCardDTO.setAllergies(survey.getAllergies());
+        patientDoctorCardDTO.setFamilyHistory(survey.getFamilyHistory());
+        patientDoctorCardDTO.setSmoking(survey.getSmoking());
+        patientDoctorCardDTO.setAlcohol(survey.getAlcohol());
+
+        System.out.println("Constructed PatientDoctorCardDTO: " + patientDoctorCardDTO.getFirstName() + " " + patientDoctorCardDTO.getLastName()+" "+ patientDoctorCardDTO.getAge());
+    
+      
+        
+        return ResponseEntity.ok(patientDoctorCardDTO);
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }           
+       
+
+    }
+
+
 
 
 

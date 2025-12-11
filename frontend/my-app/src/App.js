@@ -15,6 +15,7 @@ import Assistant from './pages/Assistant';
 import LoginForm from './pages/Login';
 import Topbar from './components/Topbar';
 import apiClient from './components/apiClient';
+import DoctorDataPatient from './pages/DoctorDataPatient';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/patient" element={<PatientMenu/>} />
           <Route path="/doctor" element={<Doctor/>} />
           <Route path="/doctorPanel" element={<DoctorPanel/>} />
+          <Route path="/patient/:id" element={<DoctorDataPatient/>} />
           <Route path="/registration" element={<Registration/>} />
           <Route path="/survey" element={<DataPatient/>} />
           <Route path="/patientCard" element={<PatientCard/>} />

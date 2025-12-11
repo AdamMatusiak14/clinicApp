@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../components/apiClient";
 import "../components/css/DoctorPanel.css";
 
 export default function DoctorPanel() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("cards");
   const [isListOpen, setIsListOpen] = useState(true);
   const [patients, setPatients] = useState([]);
@@ -22,20 +23,28 @@ export default function DoctorPanel() {
       .finally(() => setLoading(false));
   }, [activeTab]);
   
-
-  // Przykładowe dane do lokalnego testu:
-  // useEffect(() => {
-  //   setPatients([
-  //     { id: 1, firstName: "Jan", lastName: "Kowalski" },
-  //     { id: 2, firstName: "Anna", lastName: "Nowak" },
-  //   ]);
-  // }, []);
+ async function handlePatientClick(patientId) {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await apiClient.get("/patient/doctorCard", { params: { id: patientId } });
+      const patientCard = res.data;
+      console.log("Pobrana karta pacjenta dla lekarza:", patientCard);
+      // Przekierowujemy do strony szczegółów pacjenta; przekazujemy dane w state,
+      // ale strona szczegółów powinna mieć fallback i pobrać dane po id jeśli state jest puste.
+      navigate(`/patient/${patientId}`, { state: { patientCard } });
+    } catch (err) {
+      console.error("Błąd pobierania karty pacjenta:", err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="doctor-panel">
       <header>
         <h2>Panel Lekarza</h2>
-        {/* Możesz tu dodać imię lekarza: {authUser?.firstName} {authUser?.lastName} */}
       </header>
 
       <nav className="doctor-tabs">
@@ -81,10 +90,27 @@ export default function DoctorPanel() {
 
                 {!loading && patients.length > 0 && (
                   <ul style={{ listStyle: "none", padding: 0 }}>
-                    {patients.map((p) => (
-                      <li key={p.id} style={{ padding: "6px 0" }}>
-                        <Link to={`/patients/${p.id}`}>
+             {patients.map((p) => (
+                      <li key={p.id} style={{ padding: "6px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <button
+                          onClick={() => handlePatientClick(p.id)}
+                          style={{
+                            background: "transparent",
+                            border: "none",
+                            color: "#083b08",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                            padding: 0,
+                            textDecoration: "underline",
+                          }}
+                          aria-label={`Otwórz kartę pacjenta ${p.firstName} ${p.lastName}`}
+                        >
                           {p.firstName} {p.lastName}
+                        </button>
+
+                        {/* Mały link jako alternatywa (zachowuje semantykę i możliwość otwarcia w nowej karcie) */}
+                        <Link to={`/patient/${p.id}`} style={{ marginLeft: 12, fontSize: 12 }}>
+                          Otwórz (bez fetch)
                         </Link>
                       </li>
                     ))}

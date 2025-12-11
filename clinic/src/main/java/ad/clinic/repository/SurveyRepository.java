@@ -9,6 +9,9 @@ import ad.clinic.model.PatientData;
 
 @Repository
 public interface SurveyRepository extends JpaRepository <PatientData, Long> {
-;
+
+
+
+     
     
 }

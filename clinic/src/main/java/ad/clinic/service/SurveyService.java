@@ -23,7 +23,7 @@ public class SurveyService {
 
     public PatientData getSurveyByID(Long id) {
        return surveyRepository.findById(id).orElseThrow(() -> new RuntimeException("Survey not found"));
-      
     
 }
+
 }
