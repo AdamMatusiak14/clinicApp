@@ -1,19 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import apiClient from "../components/apiClient";
-import "../components/css/PatientCard.css"; // korzystamy ze stylów podobnych do PatientCard
+//import "../components/css/PrescriptionTabs.css"; // nowy plik CSS
 
 export default function DoctorDataPatient() {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Przyjmujemy patientCard z location.state jeśli jest, inaczej null
-  const [patient, setPatient] = useState(location.state?.patientCard || null);
-  const [loading, setLoading] = useState(false);
+  const [patient, setPatient] = useState(location.state?.patientCard || null);  
+  const [loading, setLoading] = useState(false);                                
   const [error, setError] = useState(null);
 
-  // Jeśli nie mamy danych (np. direct link / odświeżenie), fetchujemy po id
+  // State dla recept
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [loadingPrescriptions, setLoadingPrescriptions] = useState(false);
+  const [prescriptionsError, setPrescriptionsError] = useState(null);
+  const [expandedTab, setExpandedTab] = useState(null); // "list", "medicines", "create"
+
+  // State dla rozwiniętej recepty
+  const [expandedPrescription, setExpandedPrescription] = useState(null);
+
+  // State dla formularza nowej recepty
+  const [newPrescription, setNewPrescription] = useState({
+    medicine: "",
+    dosage: "",
+    duration: "",
+    instructions: ""
+  });
+  const [creatingPrescription, setCreatingPrescription] = useState(false);
+
+  // Pobranie danych pacjenta
   useEffect(() => {
     if (patient) return; // mamy już dane
     if (!id) {
@@ -34,6 +51,80 @@ export default function DoctorDataPatient() {
       .finally(() => setLoading(false));
   }, [id, patient]);
 
+  // Pobranie recept dla pacjenta
+  const fetchPrescriptions = () => {
+    if (!id) return;
+    
+    setLoadingPrescriptions(true);
+    setPrescriptionsError(null);
+    console.log("Fetching prescriptions for patient ID:", patientId);
+    
+    apiClient
+      .get("/prescription/findByIdPatient", { params: { patientId } })
+      .then((res) => {
+        // Zakładamy, że backend zwraca listę PrescriptionDTO jako JSON
+        setPrescriptions(res.data);
+        console.log("Daty recept pobrane");
+      })
+      .catch((err) => {
+        console.error("Błąd pobierania recept:", err);
+        setPrescriptionsError("Nie udało się pobrać dat recept");
+      })
+      .finally(() => setLoadingPrescriptions(false));
+  };
+
+  const handleTabClick = (tab) => {
+    if (expandedTab === tab) {
+      setExpandedTab(null);
+    } else {
+      setExpandedTab(tab);
+      if (tab === "list") {
+        fetchPrescriptions();
+      }
+    }
+  };
+
+  const handleCreatePrescription = async () => {
+    if (!newPrescription.medicine || !newPrescription.dosage) {
+      alert("Wypełnij wymagane pola: lek i dawkę");
+      return;
+    }
+
+    setCreatingPrescription(true);
+    try {
+      // TODO: Dodać endpoint do utworzenia nowej recepty
+      const response = await apiClient.post("/api/prescription/create", {
+        patientId: id,
+        medicine: newPrescription.medicine,
+        dosage: newPrescription.dosage,
+        duration: newPrescription.duration,
+        instructions: newPrescription.instructions
+      });
+
+      alert("Recepta wystawiona pomyślnie!");
+      setNewPrescription({
+        medicine: "",
+        dosage: "",
+        duration: "",
+        instructions: ""
+      });
+      setExpandedTab(null);
+      fetchPrescriptions();
+    } catch (err) {
+      console.error("Błąd podczas tworzenia recepty:", err);
+      alert("Błąd podczas wystawienia recepty");
+    } finally {
+      setCreatingPrescription(false);
+    }
+  };
+
+  const handleInputChange = (field, value) => {
+    setNewPrescription(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
   if (loading) {
     return <div className="patient-card-container"><div className="patient-card"><p>Ładowanie danych pacjenta...</p></div></div>;
   }
@@ -46,7 +137,6 @@ export default function DoctorDataPatient() {
     return <div className="patient-card-container"><div className="patient-card"><p>Brak danych pacjenta do wyświetlenia.</p></div></div>;
   }
 
-  // Obsługa różnych nazw pola id (czasem backend zwraca `id`, innym razem `patientId`)
   const patientId = patient.id ?? patient.patientId;
 
   return (
@@ -70,6 +160,139 @@ export default function DoctorDataPatient() {
         <p><strong>Palacz:</strong> {patient.smoking ?? "—"}</p>
         <p><strong>Alkohol:</strong> {patient.alcohol ?? "—"}</p>
 
+        <hr />
+
+        {/* Sekcja Recept */}
+        <h3>Recepty</h3>
+        <div className="prescription-tabs">
+          {/* Tab 1: Lista recept */}
+          <div className="prescription-tab">
+            <button 
+              className="tab-header"
+              onClick={() => handleTabClick("list")}
+            >
+              <span>📋 Lista Recept Pacjenta</span>
+              <span className="tab-arrow">{expandedTab === "list" ? "▼" : "▶"}</span>
+            </button>
+            {expandedTab === "list" && (
+              <div className="tab-content">
+                {loadingPrescriptions ? (
+                  <p>Ładowanie recept...</p>
+                ) : prescriptionsError ? (
+                  <p style={{ color: "red" }}>{prescriptionsError}</p>
+                ) : prescriptions.length > 0 ? (
+                  <ul className="prescriptions-list">
+                    {prescriptions.map((rx, idx) => (
+                      <li key={rx.code || idx}>
+                        <button 
+                          className="prescription-date-btn"
+                          onClick={() => setExpandedPrescription(expandedPrescription === rx.code ? null : rx.code)}
+                        >
+                          {rx.issueDate} {expandedPrescription === rx.code ? "▼" : "▶"}
+                        </button>
+                        {expandedPrescription === rx.code && (
+                          <div className="prescription-details">
+                            <p><strong>Kod recepty:</strong> {rx.code}</p>
+                            <p><strong>Lekarz:</strong> {rx.firstNameDoctor} {rx.lastNameDoctor}</p>
+                            <p><strong>Lek:</strong> {rx.medicine}</p>
+                          </div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Brak recept dla tego pacjenta.</p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Tab 2: Przepisane leki */}
+          <div className="prescription-tab">
+            <button 
+              className="tab-header"
+              onClick={() => handleTabClick("medicines")}
+            >
+              <span>💊 Przepisane leki</span>
+              <span className="tab-arrow">{expandedTab === "medicines" ? "▼" : "▶"}</span>
+            </button>
+            {expandedTab === "medicines" && (
+              <div className="tab-content">
+                <p><strong>Leki aktualnie stosowane:</strong></p>
+                <p>{patient.takingMedication || "Brak danych o lekach"}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Tab 3: Wystawienie nowej recepty */}
+          <div className="prescription-tab">
+            <button 
+              className="tab-header"
+              onClick={() => handleTabClick("create")}
+            >
+              <span>✏️ Wystaw Receptę</span>
+              <span className="tab-arrow">{expandedTab === "create" ? "▼" : "▶"}</span>
+            </button>
+            {expandedTab === "create" && (
+              <div className="tab-content">
+                <form className="prescription-form" onSubmit={(e) => { e.preventDefault(); handleCreatePrescription(); }}>
+                  <div className="form-group">
+                    <label>Lek (wymagane) *</label>
+                    <input
+                      type="text"
+                      value={newPrescription.medicine}
+                      onChange={(e) => handleInputChange("medicine", e.target.value)}
+                      placeholder="Nazwa leku"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Dawka (wymagane) *</label>
+                    <input
+                      type="text"
+                      value={newPrescription.dosage}
+                      onChange={(e) => handleInputChange("dosage", e.target.value)}
+                      placeholder="np. 2x dziennie po 500mg"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Czas trwania</label>
+                    <input
+                      type="text"
+                      value={newPrescription.duration}
+                      onChange={(e) => handleInputChange("duration", e.target.value)}
+                      placeholder="np. 7 dni"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Uwagi/Instrukcje</label>
+                    <textarea
+                      value={newPrescription.instructions}
+                      onChange={(e) => handleInputChange("instructions", e.target.value)}
+                      placeholder="Dodatkowe instrukcje dla pacjenta..."
+                      rows="3"
+                    />
+                  </div>
+
+                  <button 
+                    type="submit"
+                    className="btn-create-prescription"
+                    disabled={creatingPrescription}
+                  >
+                    {creatingPrescription ? "Tworzenie..." : "Wystawić Receptę"}
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <hr />
+
         <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
           <button
             style={{
@@ -82,7 +305,6 @@ export default function DoctorDataPatient() {
               cursor: "pointer"
             }}
             onClick={() => {
-              // Przykładowy handler: tutaj możesz otworzyć edycję lub przesłać dane dalej
               alert("Tu możesz otworzyć edycję pacjenta (implementuj według potrzeb).");
             }}
           >

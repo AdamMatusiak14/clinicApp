@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -88,9 +89,55 @@ public class PrescriptionController {
     }
        
 
+    @GetMapping("/findByIdPatient")
+    ResponseEntity<List<PrescriptionDTO>> findByIdPatient(@RequestParam("patientId") Long patientId){ 
+        System.out.println("Fetching prescription dates for patient ID: " + patientId);
+        List<Prescription> prescriptions = prescriptionService.findByPatientId(patientId);
+        List<PrescriptionDTO> prescriptionsDTO = new ArrayList<>();
+
+         Iterator <Prescription> iteratorPrescription = prescriptions.iterator();
+
+        while(iteratorPrescription.hasNext()){
+            Prescription prescription = iteratorPrescription.next();
+
+            Patient patient = patientService.findById(patientId);
+           Long doctorId = prescription.getDoctor().getId();
+           Doctor doctor = doctorService.getDoctorById(doctorId);
+
+           String doctorFirstName = doctor.getFirstName();
+           String doctorLastName = doctor.getLastName();
+           String code = prescription.getCode();
+           LocalDate issueDate = prescription.getIssueDate();
+           String medicine = prescription.getMedicine();
+           String patientFirstName = patient.getFirstName();
+           String patientLastName = patient.getLastName();
+
+              System.out.println("Prescriptions Doctor: " + doctorFirstName + " " + doctorLastName);
+              System.out.println("Prescriptions Patient: " + patientFirstName + " " + patientLastName);
+
+           prescriptionsDTO.add(new PrescriptionDTO(code, issueDate, patientFirstName, patientLastName, doctorFirstName, doctorLastName, medicine));
+
+        }
+
+        // Iterator <Prescription> prescriptionsIterator = prescriptions.iterator();
+        // List<LocalDate> prescriptionDates = new ArrayList<>();
+
+        // while(prescriptionsIterator.hasNext()){
+        //     Prescription prescription = prescriptionsIterator.next();
+        //     LocalDate issueDate = prescription.getIssueDate();
+        //     prescriptionDates.add(issueDate);
+            
+        // }
+      
+        
+        return new ResponseEntity<>(prescriptionsDTO, HttpStatus.OK);
+
        // Pacjent
        // Lekarze, lekarze ktorzy wystawili recepty
-        
+    }
+
+
+   
        
 
     

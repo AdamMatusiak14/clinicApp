@@ -85,9 +85,9 @@ public class JwtFilter extends OncePerRequestFilter {
       
     }
 
-         System.out.print("doFilterInternal - start");
+         System.out.print("doFilterInternal - start ");
         filterChain.doFilter(request, response); // idziemy dalej
-        System.out.print("doFilterInternal - stop");
+        System.out.print(" doFilterInternal - stop");
 
 }
 }

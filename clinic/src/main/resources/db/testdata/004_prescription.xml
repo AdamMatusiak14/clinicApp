@@ -20,7 +20,13 @@
         </insert>
 
 
-        
+         <insert tableName="prescription">
+            <column name="patient_id" value="1" />
+            <column name="doctor_id" value="2" />
+            <column name="issue_date" valueDate="2025-12-02" />
+            <column name="code" value="RG53412" />
+            <column name="medicine" value="Polopiryna" />
+        </insert>
 
 
     </changeSet>
