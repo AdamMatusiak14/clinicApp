@@ -13,10 +13,11 @@ public class JwtTokenProvider {
     private final SecretKey key = Jwts.SIG.HS256.key().build();
     private final long validityInMs = 3600000; // 1h
 
-    public String generateToken(String username, String role) {
+    public String generateToken(String username, String role, Long id) {
      return Jwts.builder()
         .subject(username)
         .claim("role", role)
+        .claim("id", id)
         .issuedAt(new Date())
         .expiration(new Date(System.currentTimeMillis() + validityInMs))
         .signWith(key, Jwts.SIG.HS256) // Trzeba jawnie podać algorytm

@@ -42,6 +42,11 @@ public class DoctorService {
        return doctorRepository.findDoctorByEmail(username);  
 
         }
+
+    public Doctor findDoctorByEmail(String email) {
+        return doctorRepository.findDoctorByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Doctor not found with email: " + email));
+    }
        
     
     

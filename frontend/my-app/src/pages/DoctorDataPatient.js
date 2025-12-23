@@ -24,9 +24,10 @@ export default function DoctorDataPatient() {
   // State dla formularza nowej recepty
   const [newPrescription, setNewPrescription] = useState({
     medicine: "",
-    dosage: "",
-    duration: "",
-    instructions: ""
+    patientId: prescriptions.patientId || id,
+
+    
+   
   });
   const [creatingPrescription, setCreatingPrescription] = useState(false);
 
@@ -78,35 +79,30 @@ export default function DoctorDataPatient() {
       setExpandedTab(null);
     } else {
       setExpandedTab(tab);
-      if (tab === "list") {
+      if (tab === "list" || tab === "medicine") {
         fetchPrescriptions();
       }
     }
   };
 
   const handleCreatePrescription = async () => {
-    if (!newPrescription.medicine || !newPrescription.dosage) {
-      alert("Wypełnij wymagane pola: lek i dawkę");
+    if (!newPrescription.medicine) {
+      alert("Wypełnij wymagane pole: leki");
       return;
     }
 
     setCreatingPrescription(true);
     try {
-      // TODO: Dodać endpoint do utworzenia nowej recepty
-      const response = await apiClient.post("/api/prescription/create", {
+     
+      const response = await apiClient.post("/prescription/create", {
         patientId: id,
         medicine: newPrescription.medicine,
-        dosage: newPrescription.dosage,
-        duration: newPrescription.duration,
-        instructions: newPrescription.instructions
+        
       });
 
       alert("Recepta wystawiona pomyślnie!");
       setNewPrescription({
         medicine: "",
-        dosage: "",
-        duration: "",
-        instructions: ""
       });
       setExpandedTab(null);
       fetchPrescriptions();
@@ -211,15 +207,23 @@ export default function DoctorDataPatient() {
           <div className="prescription-tab">
             <button 
               className="tab-header"
-              onClick={() => handleTabClick("medicines")}
+              onClick={() => handleTabClick("medicine")}
             >
               <span>💊 Przepisane leki</span>
-              <span className="tab-arrow">{expandedTab === "medicines" ? "▼" : "▶"}</span>
+              <span className="tab-arrow">{expandedTab === "medicine" ? "▼" : "▶"}</span>
             </button>
-            {expandedTab === "medicines" && (
-              <div className="tab-content">
+            {expandedTab === "medicine" && (
+              <div className="tab-content">   
                 <p><strong>Leki aktualnie stosowane:</strong></p>
-                <p>{patient.takingMedication || "Brak danych o lekach"}</p>
+                {prescriptions.length > 0 ? (
+                  <ul className="medicines-list">
+                    {prescriptions.map((rx, idx) => (
+                      <li key={rx.code || idx}>{rx.medicine}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Brak danych o lekach</p>
+                )}
               </div>
             )}
           </div>
@@ -244,37 +248,6 @@ export default function DoctorDataPatient() {
                       onChange={(e) => handleInputChange("medicine", e.target.value)}
                       placeholder="Nazwa leku"
                       required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Dawka (wymagane) *</label>
-                    <input
-                      type="text"
-                      value={newPrescription.dosage}
-                      onChange={(e) => handleInputChange("dosage", e.target.value)}
-                      placeholder="np. 2x dziennie po 500mg"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Czas trwania</label>
-                    <input
-                      type="text"
-                      value={newPrescription.duration}
-                      onChange={(e) => handleInputChange("duration", e.target.value)}
-                      placeholder="np. 7 dni"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Uwagi/Instrukcje</label>
-                    <textarea
-                      value={newPrescription.instructions}
-                      onChange={(e) => handleInputChange("instructions", e.target.value)}
-                      placeholder="Dodatkowe instrukcje dla pacjenta..."
-                      rows="3"
                     />
                   </div>
 

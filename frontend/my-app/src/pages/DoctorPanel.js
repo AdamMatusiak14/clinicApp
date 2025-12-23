@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../components/apiClient";
 import "../components/css/DoctorPanel.css";
+import { jwtDecode }  from "jwt-decode";
 
 export default function DoctorPanel() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("cards");
   const [isListOpen, setIsListOpen] = useState(true);
   const [patients, setPatients] = useState([]);
+  const [visits, setVisits] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -22,6 +24,30 @@ export default function DoctorPanel() {
       .catch(err => setError(err))
       .finally(() => setLoading(false));
   }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab !== "schedule") return;
+    loadDoctorVisits();
+  }, [activeTab]);
+
+
+  // Doctor Grafik
+  const loadDoctorVisits = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = sessionStorage.getItem("token");
+      const decoded = jwtDecode(token);
+      const doctorId = decoded.id;  
+      const res = await apiClient.get(`/visit/doctor/${doctorId}`);
+      setVisits(res.data);
+    } catch (err) {
+      console.error("Błąd pobierania wizyt:", err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   
  async function handlePatientClick(patientId) {
     try {
@@ -124,7 +150,37 @@ export default function DoctorPanel() {
         {activeTab === "schedule" && (
           <div>
             <h3>Grafik</h3>
-            <p>Tu wyświetl grafik lekarza — załaduj z API.</p>
+            {loading && <p>Ładowanie wizyt...</p>}
+            {error && <p style={{ color: "red" }}>Błąd: {String(error)}</p>}
+            {!loading && visits.length === 0 && !error && (
+              <p>Brak wizyt w grafiku.</p>
+            )}
+            {!loading && visits.length > 0 && (
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr>
+                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Imię i nazwisko pacjenta</th>
+                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Data wizyty</th>
+                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Godzina wizyty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visits.map((visit) => (
+                    <tr key={visit.visitId}>
+                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        {visit.patientName} {visit.patientSurname}
+                      </td>
+                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        {visit.date}
+                      </td>
+                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                        {visit.time}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         )}
       </section>

@@ -28,6 +28,10 @@ public class VisitService {
       
     } 
     
+    public List<Visit> findVisitByDoctorId(Long doctorId) {
+        return visitRepository.findByDoctorId(doctorId);
+    } 
+    
     public List<String> getAvailableTimes(Long doctorId, LocalDate date) {
         // Logic to find available times for the given doctor on the specified date
         List<String> allSlots = generateSlots();

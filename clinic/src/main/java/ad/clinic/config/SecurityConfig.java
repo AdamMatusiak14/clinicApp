@@ -70,7 +70,7 @@ public class SecurityConfig {
             .requestMatchers("/api/patient/**").hasAnyRole("PATIENT", "DOCTOR")
             .requestMatchers("/api/prescription/**").hasAnyRole("PATIENT", "DOCTOR")
             .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
-            //.requestMatchers("/api/prescription/**").hasRole("DOCTOR")
+            .requestMatchers("/api/visit/**").hasRole("DOCTOR")
            
            // .requestMatchers("/api/patient/survey").hasRole("PATIENT")
             //.requestMatchers("/ws/**/**").permitAll()

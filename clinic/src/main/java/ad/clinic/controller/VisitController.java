@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ad.clinic.DTO.VisitDTO;
+import ad.clinic.DTO.VisitDTOGrafik;
 import ad.clinic.DTO.VisitFrontDTO;
 import ad.clinic.model.Doctor;
 import ad.clinic.model.Patient;
@@ -67,6 +69,35 @@ public class VisitController {
 
         
         return ResponseEntity.ok(visitDTO); // Return the found visit DTO
+    }
+
+    @GetMapping("/doctor/{doctorId}")
+    ResponseEntity<List<VisitDTOGrafik>> findVisitsByDoctorId(@PathVariable Long doctorId) {
+        List<VisitDTOGrafik> visitDTOs = new ArrayList<>();
+        List<Visit> visits = visitService.findVisitByDoctorId(doctorId);
+
+        
+        
+        Iterator<Visit> iteratorVisit = visits.iterator();
+
+        while(iteratorVisit.hasNext()) {
+            Visit visit = iteratorVisit.next();
+            Long patientId = visit.getPatient().getId();
+            Patient patient = patientService.findById(patientId);
+            String  patientFirstName = patient.getFirstName();
+            String  patientLastName = patient.getLastName();    
+            VisitDTOGrafik visitDtoGrafik = new VisitDTOGrafik();
+            visitDtoGrafik.setPatientName(patientFirstName);
+            visitDtoGrafik.setPatientSurname(patientLastName);
+            visitDtoGrafik.setDate(visit.getDate().toString());
+            visitDtoGrafik.setTime(visit.getTime().toString());
+           
+
+            visitDTOs.add(visitDtoGrafik);
+        }
+       
+
+        return ResponseEntity.ok(visitDTOs);
     }
 
 

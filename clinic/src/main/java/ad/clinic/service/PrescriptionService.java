@@ -22,4 +22,8 @@ public class PrescriptionService {
         return prescriptionRepository.findByPatientId(patientId);
     }       
     
+
+    public void savePrescription(Prescription prescription) {
+        prescriptionRepository.save(prescription);
+    }
 }

@@ -15,5 +15,7 @@ public List<Visit> findByPatientId(Long id);
     // Example: List<Visit> findByPatientId(Long patientId);
 
 public List<Visit> findByDoctorIdAndDate(Long doctorId, java.time.LocalDate date);     
+
+public List<Visit> findByDoctorId(Long doctorId);
     
 } 

@@ -2,13 +2,15 @@ package ad.clinic.security;
 
 public class AuthRequest {
     private String email;
-    private String password;    
+    private String password;  
+    private Long id; 
 
     public AuthRequest() {}
 
-    public AuthRequest(String email, String password) {
+    public AuthRequest(String email, String password, Long id) {
         this.email = email;
         this.password = password;
+        this.id = id;
     }   
 
     public String getemail() {
@@ -23,6 +25,12 @@ public class AuthRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+        
 
 
 }

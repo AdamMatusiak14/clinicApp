@@ -20,6 +20,14 @@
             <column name="doctor_id" value="2" />
             <column name="patient_id" value="2" />
         </insert>
+
+         <insert tableName="visit">
+            <column name="time" value="10:30:00" />
+            <column name="date" value="2025-12-22" />
+            <column name="info" value="Kontrola po operacji" />
+            <column name="doctor_id" value="2" />
+            <column name="patient_id" value="1" />
+        </insert>
         
 
 

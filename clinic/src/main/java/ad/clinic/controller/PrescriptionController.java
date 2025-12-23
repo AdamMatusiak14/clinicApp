@@ -10,13 +10,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ad.clinic.DTO.PrescriptionCreateRequestDTO;
 import ad.clinic.DTO.PrescriptionDTO;
 import ad.clinic.model.Doctor;
 import ad.clinic.model.Patient;
@@ -118,27 +122,40 @@ public class PrescriptionController {
            prescriptionsDTO.add(new PrescriptionDTO(code, issueDate, patientFirstName, patientLastName, doctorFirstName, doctorLastName, medicine));
 
         }
-
-        // Iterator <Prescription> prescriptionsIterator = prescriptions.iterator();
-        // List<LocalDate> prescriptionDates = new ArrayList<>();
-
-        // while(prescriptionsIterator.hasNext()){
-        //     Prescription prescription = prescriptionsIterator.next();
-        //     LocalDate issueDate = prescription.getIssueDate();
-        //     prescriptionDates.add(issueDate);
-            
-        // }
       
-        
         return new ResponseEntity<>(prescriptionsDTO, HttpStatus.OK);
 
-       // Pacjent
-       // Lekarze, lekarze ktorzy wystawili recepty
+   
     }
 
+@PostMapping("/create")
+public ResponseEntity<Void> createPrescription(@RequestBody PrescriptionCreateRequestDTO request, @AuthenticationPrincipal UserDetails userDetails){
+    
+    System.out.println("Jestem kontrolerel Create Prescription");
+
+    Doctor doctor = doctorService.findDoctorByEmail(userDetails.getUsername());
+   
+
+    Patient patient = patientService.findById(request.getPatientId());
+
+    LocalDate issueDate = LocalDate.now();
+
+    String code = "RX-" + System.currentTimeMillis(); // Simple unique code generation
+    Prescription prescription = new Prescription();
+
+    prescription.setDoctor(doctor);
+    prescription.setPatient(patient);
+    prescription.setMedicine(request.getMedicine());
+    prescription.setIssueDate(issueDate);
+    prescription.setCode(code);
+
+    prescriptionService.savePrescription(prescription);
+    
+    
+    return ResponseEntity.status(HttpStatus.CREATED).build();
 
    
-       
+}
 
     
 }

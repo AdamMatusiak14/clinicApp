@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ad.clinic.security.AuthRequest;
 import ad.clinic.security.AuthResponse;
 import ad.clinic.security.JwtTokenProvider;
+import ad.clinic.service.DoctorService;
+import ad.clinic.service.PatientService;
 
 
 @CrossOrigin(origins = "http://localhost:3000") 
@@ -26,13 +28,15 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final DoctorService doctorService;
+    private final PatientService patientService;
    
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider)  {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, DoctorService doctorService, PatientService patientService)  {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-      
-      
+        this.doctorService = doctorService;
+        this.patientService = patientService;
     }
 
 
@@ -42,6 +46,7 @@ public class AuthController {
 
         System.out.println("Name " + request.getemail());
         System.out.println("Password " + request.getPassword());
+        System.out.println("ID " + request.getId());
 
         // AuthenticationManager
         Authentication authentication = authenticationManager.authenticate(
@@ -55,7 +60,15 @@ public class AuthController {
                 .findFirst()
                 .map(auth -> auth.getAuthority())
                 .orElse("ROLE_USER"); // Domyślna rola, jeśli nie znaleziono    
-        String token = jwtTokenProvider.generateToken(userDetails.getUsername(), role);
+
+        Long userId = null;
+        if (role.equals("ROLE_DOCTOR")) {
+            userId = doctorService.findDoctorByUsername(userDetails.getUsername()).get().getId();
+        } else if (role.equals("ROLE_PATIENT")) {
+            userId = patientService.findPatientByUsername(userDetails.getUsername()).get().getId();
+        }
+
+        String token = jwtTokenProvider.generateToken(userDetails.getUsername(), role, userId );
 
 
         return ResponseEntity.ok(new AuthResponse(token));
