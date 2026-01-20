@@ -92,7 +92,7 @@ public class PatientService {
         return optionalPatient.orElse(null);
     }
 
-    public Patient findByUsername(String username) {  // Tu jest problem odpal i zobacz
+    public Patient findByUsername(String username) {  
         return patientRepository.findPatientByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Patient not found with username: " + username));
     }   

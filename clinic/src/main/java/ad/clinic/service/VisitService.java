@@ -44,7 +44,7 @@ public class VisitService {
         return allSlots;
     }
 
-    private List<String> generateSlots() {
+  public List<String> generateSlots() {
         // Generate all possible time slots (e.g., every 30 minutes from 08:00 to 15:30)
         List<String> slots = new java.util.ArrayList<>();
         for (int hour = 8; hour < 16; hour++) {

@@ -28,7 +28,7 @@ public class PatientData {
 
 
 
-    PatientData() {
+   public  PatientData() {
         // Default constructor
     }   
 
