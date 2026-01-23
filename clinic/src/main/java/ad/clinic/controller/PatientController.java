@@ -80,10 +80,6 @@ public class PatientController {
           Patient patient = patientService.findPatient(patientDTO); // patientRepository.findByFirstNameAndLastName(firstName, lastName);
         
 
-          PatientDTO DTOPatient = new PatientDTO();
-          DTOPatient.setId(patient.getId());
-          DTOPatient.setFirstName(patient.getFirstName());  
-            DTOPatient.setLastName(patient.getLastName());
 
         //   PatientCardDTO patientCardData = new PatientCardDTO();
         //   patientCardData.setPatientId(patient.getId());
@@ -92,6 +88,11 @@ public class PatientController {
         //   patientCardData.setInfoPatient(patient.getInfoPatient());
             
             if (patient != null) {
+                
+            PatientDTO DTOPatient = new PatientDTO();
+            DTOPatient.setId(patient.getId());
+            DTOPatient.setFirstName(patient.getFirstName());  
+            DTOPatient.setLastName(patient.getLastName());
             return ResponseEntity.ok(DTOPatient); // Pacjent istnieje
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Pacjent nie istnieje
@@ -143,11 +144,14 @@ public ResponseEntity<PatientCardDTO> getCurrentPatientCard(@AuthenticationPrinc
 public ResponseEntity<PatientDoctorCardDTO> getPatientCardForDoctor(@RequestParam("id") Long id) { 
     System.out.println("Fetching patient card for doctor, patient ID: " + id); // jest 
     Patient patient = patientService.findById(id);
+    if(patient == null){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
     System.out.println("Found patient: " + (patient != null ? patient.getFirstName() + " " + patient.getLastName() : "null"));
      PatientData survey = surveyService.getSurveyByID(patient.getPatientData().getId());
      System.out.println("Found survey data: " + (survey != null ? "exists" : "null"));
     
-    if (patient != null) {
+    
         PatientDoctorCardDTO patientDoctorCardDTO = new PatientDoctorCardDTO();
         
         patientDoctorCardDTO.setId(patient.getId());
@@ -170,9 +174,7 @@ public ResponseEntity<PatientDoctorCardDTO> getPatientCardForDoctor(@RequestPara
       
         
         return ResponseEntity.ok(patientDoctorCardDTO);
-    } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }           
+              
        
 
     }
