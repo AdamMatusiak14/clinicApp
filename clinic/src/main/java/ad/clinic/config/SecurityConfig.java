@@ -62,7 +62,7 @@ public class SecurityConfig {
             .requestMatchers("/konsola-h2/**").permitAll()
             .requestMatchers("/patient", "/registration", "/verfication").permitAll()
             .requestMatchers("/doctor").permitAll()
-            .requestMatchers("/assistent").permitAll()
+            .requestMatchers("/assistant/description").permitAll() // Tu zmieniałeś
             .requestMatchers("/api/doctors").permitAll()
             .requestMatchers("/uploads/**").permitAll()
             .requestMatchers("/api/auth/**").permitAll()

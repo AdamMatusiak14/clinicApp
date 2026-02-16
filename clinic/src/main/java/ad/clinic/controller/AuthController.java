@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ad.clinic.model.Doctor;
+import ad.clinic.model.Patient;
 import ad.clinic.security.AuthRequest;
 import ad.clinic.security.AuthResponse;
 import ad.clinic.security.JwtTokenProvider;
@@ -63,9 +65,12 @@ public class AuthController {
 
         Long userId = null;
         if (role.equals("ROLE_DOCTOR")) {
-            userId = doctorService.findDoctorByUsername(userDetails.getUsername()).get().getId();
+            Doctor doctor =  doctorService.findDoctorByUsername(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("Doctor not found"));
+            userId = doctor.getId();
         } else if (role.equals("ROLE_PATIENT")) {
-            userId = patientService.findPatientByUsername(userDetails.getUsername()).get().getId();
+            Patient patient =  patientService.findPatientByUsername(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("Patient not found"));
+            userId = patient.getId();
+
         }
 
         String token = jwtTokenProvider.generateToken(userDetails.getUsername(), role, userId );
