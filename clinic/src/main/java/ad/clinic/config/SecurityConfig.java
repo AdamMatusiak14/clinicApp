@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,8 +23,8 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import ad.clinic.security.JwtFilter;
 import ad.clinic.security.JwtTokenProvider;
-import ad.clinic.service.CustomDoctorDetailsService;
-import ad.clinic.service.CustomPatientDetailsService;
+import ad.clinic.service.CombinedUserDetailsService;
+
 
 
 
@@ -31,27 +32,40 @@ import ad.clinic.service.CustomPatientDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private DoctorAuthenticationProvider doctorAuthenticationProvider; 
-    private PatientAuthenticationProvider patientAuthenticationProvider; 
-    private PasswordEncoder passwordEncoder;
-    private CustomDoctorDetailsService customDoctorDetailsService; 
-    private CustomPatientDetailsService customPatientDetailsService;
+    //private final JwtTokenProvider jwtTokenProvider;
+   // private DoctorAuthenticationProvider doctorAuthenticationProvider; 
+   // private PatientAuthenticationProvider patientAuthenticationProvider; 
+    // private CustomDoctorDetailsService customDoctorDetailsService; 
+    // private CustomPatientDetailsService customPatientDetailsService;
+    public CombinedUserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider,  
-    DoctorAuthenticationProvider doctorAuthenticationProvider, PatientAuthenticationProvider patientAuthenticationProvider, 
-    PasswordEncoder passwordEncoder, CustomDoctorDetailsService customDoctorDetailsService, CustomPatientDetailsService customPatientDetailsService) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.doctorAuthenticationProvider = doctorAuthenticationProvider; 
-        this.patientAuthenticationProvider = patientAuthenticationProvider;
-        this.passwordEncoder = passwordEncoder;
-        this.customDoctorDetailsService = customDoctorDetailsService;
-        this.customPatientDetailsService = customPatientDetailsService;
-    }   
+    public SecurityConfig(CombinedUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+  
+    @Bean
+    public DaoAuthenticationProvider daoAuthProvider(PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+
    
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                  AuthenticationManager authenticationManager,
+                                                  DaoAuthenticationProvider daoAuthProvider,
+                                                  JwtFilter jwtFilter
+                                                  ) throws Exception {
      
         PathRequest.H2ConsoleRequestMatcher h2ConsoleRequestMatcher = PathRequest.toH2Console();
       http
@@ -76,8 +90,9 @@ public class SecurityConfig {
             //.requestMatchers("/ws/**/**").permitAll()
             .anyRequest().authenticated()
         )
-         .addFilterBefore(new JwtFilter(jwtTokenProvider, customDoctorDetailsService, customPatientDetailsService ), UsernamePasswordAuthenticationFilter.class)
+         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
          .authenticationManager(authenticationManager)
+         .authenticationProvider(daoAuthProvider)
          .headers(headers-> headers.frameOptions().disable())   
          .cors(cors -> cors.configurationSource(request -> { 
             CorsConfiguration config = new CorsConfiguration();
@@ -92,17 +107,18 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-        AuthenticationManagerBuilder authBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+    // @Bean
+    // public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
+    //     AuthenticationManagerBuilder authBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
 
-        authBuilder.authenticationProvider(doctorAuthenticationProvider);
-        authBuilder.authenticationProvider(patientAuthenticationProvider);
+    //     // authBuilder.authenticationProvider(doctorAuthenticationProvider);
+    //     // authBuilder.authenticationProvider(patientAuthenticationProvider);
+    //     authBuilder.userDetailsService(customDoctorDetailsService)
     
 
-        return authBuilder.build();
+    //     return authBuilder.build();
        
-    }
+    // } 
 
 
    

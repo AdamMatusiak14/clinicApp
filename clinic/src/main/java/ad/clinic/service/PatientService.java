@@ -84,7 +84,7 @@ public class PatientService {
     
 
    public Optional<Patient> findPatientByUsername(String username) {
-       return patientRepository.findPatientByEmail(username);  
+       return patientRepository.findPatientByEmail(username);   
     }
 
     public Patient findPatientByEmail(String email) {

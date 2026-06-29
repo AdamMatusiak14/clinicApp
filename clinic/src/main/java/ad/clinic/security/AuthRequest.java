@@ -1,8 +1,19 @@
 package ad.clinic.security;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class AuthRequest {
+
+    @NotBlank(message = "Email must not be empty")
+    @Email(message = "Email should be valid")
     private String email;
+
+    @NotBlank(message="Password must not be empty")
     private String password;  
+
+    @NotBlank(message="Id must not be empty")
     private Long id; 
 
     public AuthRequest() {}
@@ -13,10 +24,10 @@ public class AuthRequest {
         this.id = id;
     }   
 
-    public String getemail() {
+    public String getEmail() {
         return email;
     }
-    public void setemail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
     public String getPassword() {
