@@ -1,10 +1,17 @@
 import joblib
 import sys
+from pathlib import Path
 
 # 1. Wczytanie wytrenowanego modelu i vectorizera
 #vectorizer = joblib.load(r"C:\Users\Admin\Projects\clinicApp\ml-model\models\vectorizer.pkl")
-vectorizer, model = joblib.load(r"C:\Users\Admin\Projects\clinicApp\ml-model\models\disease_model.pkl")
+
+
+#vectorizer, model = joblib.load(r"C:\Users\Admin\Projects\clinicApp\ml-model\models\disease_model.pkl")
 #vectorizer, model = joblib.load("disease_model.pkl")
+
+MODEL_PATH = Path(__file__).resolve().parent / "models" / "disease_model.pkl"
+vectorizer, model = joblib.load(MODEL_PATH)
+
 
 def predict_disease(symptom_text):
 
