@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
-import ad.clinic.DTO.Asisstant;
+import ad.clinic.DTO.Assistant;
 import ad.clinic.service.AssistantService;
 
 @ExtendWith(MockitoExtension.class)
@@ -20,13 +20,13 @@ public class AssistantControllerTest {
     private AssistantService assistantService;
 
     @InjectMocks
-    private AssitantController assitantController;
+    private AssistantController assitantController;
 
-    private Asisstant assistant;
+    private Assistant assistant;
 
     @BeforeEach
     void setUp() {
-        assistant = new Asisstant();
+        assistant = new Assistant();
         assistant.setDescription("I have a headache and fever.");
         assistant.setResponse("flu");
     }   
@@ -42,7 +42,7 @@ public class AssistantControllerTest {
         when(assistantService.findDiease(description)).thenReturn(expectedResponse);
 
         // When
-        ResponseEntity<String> response = assitantController.getResponse(new Asisstant(description, expectedResponse));
+        ResponseEntity<String> response = assitantController.getResponse(new Assistant(description, expectedResponse));
 
         // Then
         assert(response.getStatusCode().is2xxSuccessful());

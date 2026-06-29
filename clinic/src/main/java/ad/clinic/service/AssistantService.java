@@ -1,11 +1,13 @@
 package ad.clinic.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AssistantService {
 
-
+    private static final Logger logger = LoggerFactory.getLogger(AssistantService.class);
     private final AIModelService aiService;
 
     public AssistantService( AIModelService aiService) {
@@ -16,7 +18,7 @@ public class AssistantService {
    public String  findDiease(String description) {
        
        String prediction = aiService.findDisease(description);
-       System.out.print("Prediction w AssistantService: " + prediction);
-        return prediction   ;
+       logger.debug("Prediction in AssistantService: {}", prediction);
+       return prediction;
    }
 }

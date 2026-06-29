@@ -1,13 +1,13 @@
 package ad.clinic.DTO;
 
-public class Asisstant {
+public class Assistant {
 
     String description;
     String response;
 
-    public Asisstant() {
+    public Assistant() {
     }
-    public Asisstant(String description, String response) {
+    public Assistant(String description, String response) {
         this.description = description;
         this.response = response;
     }
