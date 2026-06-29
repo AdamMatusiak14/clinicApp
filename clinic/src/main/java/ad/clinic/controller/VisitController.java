@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,6 +34,8 @@ import ad.clinic.service.VisitService;
 @RequestMapping("api/visit")
 public class VisitController {
 
+    private static final Logger logger = LoggerFactory.getLogger(VisitController.class);
+
     private VisitService visitService;
     private PatientService patientService;
     private DoctorService doctorService;
@@ -45,8 +49,6 @@ public class VisitController {
     
     @PostMapping("/findById")
     ResponseEntity <List<VisitDTO>> findVisitById(@RequestParam Long patientId) { 
-
-        System.out.println("Jestem VisitController");
 
         List <VisitDTO> visitDTO = new ArrayList<>();
         List <Visit> visits = visitService.findVisitByPatientId(patientId);
@@ -104,19 +106,16 @@ public class VisitController {
     @GetMapping("/available")
     ResponseEntity<List<String>> getAvailableTimes(@RequestParam Long doctorId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         List<String> availableTimes = visitService.getAvailableTimes(doctorId, date);
-        System.out.println("Tu kontroler Available");
+        logger.debug("Returning available times for doctor {} on {}", doctorId, date);
         return ResponseEntity.ok(availableTimes); 
     }
 
     @PostMapping("/create")
     ResponseEntity<String> createVisit(@RequestBody VisitFrontDTO visitFrontDTO) {
 
-        System.out.println("visiitFrontDTO firstName: " + visitFrontDTO.getFirstName());
-        System.out.println("visiitFrontDTO lastName: " + visitFrontDTO.getLastName());
-
-        System.out.println("visiitFrontDTO DocID: " + visitFrontDTO.getDoctor());
-        System.out.println("visiitFrontDTO date: " + visitFrontDTO.getDate());
-          System.out.println("visiitFrontDTO time: " + visitFrontDTO.getTime());
+        logger.debug("Creating visit for patient {} {} with doctor {} on {} at {}",
+                visitFrontDTO.getFirstName(), visitFrontDTO.getLastName(), visitFrontDTO.getDoctor(),
+                visitFrontDTO.getDate(), visitFrontDTO.getTime());
 
         String firstName = visitFrontDTO.getFirstName();
         String lastName = visitFrontDTO.getLastName();

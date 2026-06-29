@@ -1,5 +1,7 @@
  package ad.clinic.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
 import ad.clinic.DTO.DoctorDTO;
@@ -23,8 +25,7 @@ import java.util.List;
 @RequestMapping("/api") 
 public class DoctorController {
     
-
-
+    private static final Logger logger = LoggerFactory.getLogger(DoctorController.class);
 
     private final DoctorService doctorService;
 
@@ -34,7 +35,7 @@ public class DoctorController {
 
     @GetMapping("/doctors")
     public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
-        System.out.println("To jest metoda getAllDoctors w DoctorController");
+        logger.debug("Retrieving all doctors");
         
         List<Doctor> doctors =  doctorService.getAllDoctors();
 
@@ -71,8 +72,8 @@ public class DoctorController {
     @GetMapping("/doctor/panel")
    // @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<?> getDoctorPanel(Principal principal) {
-            String username = principal.getName();  
-            System.out.println("Authenticated doctor username: " + username);
+            String username = principal.getName();
+            logger.debug("Authenticated doctor username: {}", username);
         return ResponseEntity.ok("Welcome to the Doctor's Panel!");
     }
 }

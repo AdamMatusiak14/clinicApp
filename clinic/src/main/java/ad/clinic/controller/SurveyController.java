@@ -3,6 +3,8 @@ package ad.clinic.controller;
 import java.security.Principal;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,8 @@ import ad.clinic.service.SurveyService;
 @RequestMapping("/api/patient/survey")
 public class SurveyController {
 
+    private static final Logger logger = LoggerFactory.getLogger(SurveyController.class);
+
     private final PatientService patientService;
 
 
@@ -34,8 +38,8 @@ public class SurveyController {
     @PutMapping("/note")
     public ResponseEntity<String> saveSurveyNote(@RequestBody PatientData note, Principal principal) {
 
-      String username = principal.getName();  
-      System.out.println("Authenticated patient username: " + username);
+      String username = principal.getName();
+      logger.debug("Saving survey note for patient {}", username);
       Patient patient = patientService.findByUsername(username);  
       PatientData patientData = patient.getPatientData();   
       

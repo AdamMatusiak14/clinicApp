@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ad.clinic.security.AuthRequest;
 import ad.clinic.security.AuthResponse;
 import ad.clinic.service.AuthService;
-import ch.qos.logback.classic.Logger;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @CrossOrigin(origins = "http://localhost:3000") 
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
    
 
@@ -29,18 +31,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
-        System.out.println("Jestem kontrolerem authController");
-
-        System.out.println("Name " + request.getEmail());
-        System.out.println("Password " + request.getPassword());
-        System.out.println("ID " + request.getId());
+        logger.debug("Login attempt for email {}", request.getEmail());
 
         try {
             AuthResponse response = authService.authenticate(request);
             return ResponseEntity.ok(response);
         } catch (org.springframework.security.core.AuthenticationException ex) {
-            // Nieprawidłowe dane logowania - zwróć przyjazny komunikat JSON
-            System.out.println("Nieprawidłowe dane logowania: " + ex.getMessage());
+            logger.warn("Nieprawidłowe dane logowania: {}", ex.getMessage());
             return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
                     .body(java.util.Map.of("message", ex.getMessage()));
         } catch (Exception e) {

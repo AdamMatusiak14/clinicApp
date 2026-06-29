@@ -2,6 +2,8 @@ package ad.clinic.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,6 +32,8 @@ import ad.clinic.service.SurveyService;
 @CrossOrigin(origins = "http://localhost:3000") // Allow requests from the frontend
 @RequestMapping("/api/patient") 
 public class PatientController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PatientController.class);
 
     PatientService patientService;
     SurveyService surveyService;
@@ -102,7 +106,7 @@ public class PatientController {
 
 @GetMapping("/card") 
 public ResponseEntity<PatientCardDTO> getPatientCard(@RequestParam Long id) {
-    System.out.println("Fetching patient card for ID: " + id);
+    logger.debug("Fetching patient card for ID: {}", id);
     Patient patient = patientService.findById(id);
     
     if (patient != null) {
@@ -123,7 +127,7 @@ public ResponseEntity<PatientCardDTO> getPatientCard(@RequestParam Long id) {
     
 @GetMapping("/current")
 public ResponseEntity<PatientCardDTO> getCurrentPatientCard(@AuthenticationPrincipal UserDetails userDetails){
-    System.out.println("Getting current patient from JWT: " + userDetails.getUsername());
+    logger.debug("Getting current patient from JWT for user {}", userDetails.getUsername());
   
     Patient patient = patientService.findPatientByEmail(userDetails.getUsername());
     
@@ -142,14 +146,12 @@ public ResponseEntity<PatientCardDTO> getCurrentPatientCard(@AuthenticationPrinc
 
 @GetMapping("/doctorCard")
 public ResponseEntity<PatientDoctorCardDTO> getPatientCardForDoctor(@RequestParam("id") Long id) { 
-    System.out.println("Fetching patient card for doctor, patient ID: " + id); // jest 
+    logger.debug("Fetching patient card for doctor for patient ID: {}", id);
     Patient patient = patientService.findById(id);
     if(patient == null){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
-    System.out.println("Found patient: " + (patient != null ? patient.getFirstName() + " " + patient.getLastName() : "null"));
-     PatientData survey = surveyService.getSurveyByID(patient.getPatientData().getId());
-     System.out.println("Found survey data: " + (survey != null ? "exists" : "null"));
+    PatientData survey = surveyService.getSurveyByID(patient.getPatientData().getId());
     
     
         PatientDoctorCardDTO patientDoctorCardDTO = new PatientDoctorCardDTO();
@@ -169,7 +171,8 @@ public ResponseEntity<PatientDoctorCardDTO> getPatientCardForDoctor(@RequestPara
         patientDoctorCardDTO.setSmoking(survey.getSmoking());
         patientDoctorCardDTO.setAlcohol(survey.getAlcohol());
 
-        System.out.println("Constructed PatientDoctorCardDTO: " + patientDoctorCardDTO.getFirstName() + " " + patientDoctorCardDTO.getLastName()+" "+ patientDoctorCardDTO.getAge());
+        logger.debug("Constructed PatientDoctorCardDTO for patient {} {} with age {}",
+                patientDoctorCardDTO.getFirstName(), patientDoctorCardDTO.getLastName(), patientDoctorCardDTO.getAge());
     
       
         

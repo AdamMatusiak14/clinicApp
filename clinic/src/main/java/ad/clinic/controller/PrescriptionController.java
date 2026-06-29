@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,6 +37,8 @@ import ad.clinic.service.PrescriptionService;
 @RestController
 @RequestMapping("/api/prescription") 
 public class PrescriptionController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PrescriptionController.class);
     
     private final PrescriptionService prescriptionService;
     private final PatientService patientService;
@@ -72,12 +76,7 @@ public class PrescriptionController {
            String patientFirstName = patient.getFirstName();
            String patientLastName = patient.getLastName();
 
-              System.out.println("Prescriptions Doctor: " + doctorFirstName + " " + doctorLastName);
-              System.out.println("Prescriptions Patient: " + patientFirstName + " " + patientLastName);
-
-           prescriptionsDTO.add(new PrescriptionDTO(code, issueDate, patientFirstName, patientLastName, doctorFirstName, doctorLastName, medicine));
-
-        }
+           logger.debug("Prescription details for patient {} {}: doctor {} {}", patientFirstName, patientLastName, doctorFirstName, doctorLastName);
 
      
 
@@ -95,7 +94,7 @@ public class PrescriptionController {
 
     @GetMapping("/findByIdPatient")
     ResponseEntity<List<PrescriptionDTO>> findByIdPatient(@RequestParam("patientId") Long patientId){ 
-        System.out.println("Fetching prescription dates for patient ID: " + patientId);
+        logger.debug("Fetching prescription dates for patient ID: {}", patientId);
         List<Prescription> prescriptions = prescriptionService.findByPatientId(patientId);
         List<PrescriptionDTO> prescriptionsDTO = new ArrayList<>();
 
@@ -116,8 +115,7 @@ public class PrescriptionController {
            String patientFirstName = patient.getFirstName();
            String patientLastName = patient.getLastName();
 
-              System.out.println("Prescriptions Doctor: " + doctorFirstName + " " + doctorLastName);
-              System.out.println("Prescriptions Patient: " + patientFirstName + " " + patientLastName);
+           logger.debug("Prescription details for patient {} {}: doctor {} {}", patientFirstName, patientLastName, doctorFirstName, doctorLastName);
 
            prescriptionsDTO.add(new PrescriptionDTO(code, issueDate, patientFirstName, patientLastName, doctorFirstName, doctorLastName, medicine));
 
@@ -131,7 +129,7 @@ public class PrescriptionController {
 @PostMapping("/create")
 public ResponseEntity<Void> createPrescription(@RequestBody PrescriptionCreateRequestDTO request, @AuthenticationPrincipal UserDetails userDetails){
     
-    System.out.println("Jestem kontrolerel Create Prescription");
+    logger.debug("Creating prescription for doctor {}", userDetails.getUsername());
 
     Doctor doctor = doctorService.findDoctorByEmail(userDetails.getUsername());
    
