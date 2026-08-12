@@ -17,6 +17,7 @@ import ad.clinic.model.Patient;
 import ad.clinic.model.PatientData;
 import ad.clinic.service.PatientService;
 import ad.clinic.service.SurveyService;
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") // Allow requests from the frontend
@@ -36,7 +37,7 @@ public class SurveyController {
     private final SurveyService surveyService;  
 
     @PutMapping("/note")
-    public ResponseEntity<String> saveSurveyNote(@RequestBody PatientData note, Principal principal) {
+    public ResponseEntity<String> saveSurveyNote(@RequestBody @Valid PatientData note, Principal principal) {
 
       String username = principal.getName();
       logger.debug("Saving survey note for patient {}", username);

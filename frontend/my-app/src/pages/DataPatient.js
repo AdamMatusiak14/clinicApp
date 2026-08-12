@@ -7,12 +7,12 @@ const DataPatient = () => {
   const [form, setForm] = useState({
     age: "",
     sex: "",
-    takingMedication: "",
-    pastIllnesses: "",
-    chronicDiseases: "",
-    vaccinations: "",
-    allergies: "",
-    familyHistory: "",
+    takingMedication: "none detected",
+    pastIllnesses: "none detected",
+    chronicDiseases: "none detected",
+    vaccinations: "none detected",
+    allergies: "none detected",
+    familyHistory: "none detected",
     smoking: "",
     alcohol: "",
    });
@@ -20,6 +20,7 @@ const DataPatient = () => {
   const [patientCard, setPatientCard] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setLoading(true);
@@ -38,10 +39,16 @@ const DataPatient = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [e.target.name]: undefined,
+    }));  
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({}); // Reset errors before submission
 
    
 
@@ -52,8 +59,14 @@ const DataPatient = () => {
         navigate("/patient");
       })
       .catch((error) => {
-        alert("Błąd zapisu ankiety: " + (error.message || error));
-      });
+        console.error("Błąd zapisu ankiety: ", error);
+        if(error.response && error.response.status === 400 && error.response.data) {
+      setErrors(error.response.data)
+      alert("Wystąpiły błędy walidacji. Sprawdź formularz");
+    }else{
+      alert("Błąd zapisu ankiety: " + (error.response?.data.message || error.message || error));
+    }
+  });
   };
 
   if (loading) return <div className="datapatient-container">Ładowanie danych pacjenta...</div>;
@@ -64,7 +77,7 @@ const DataPatient = () => {
       <div className="patient-verified">
    
          <strong className="patient-label">Zalogowany pacjent:</strong>
-+        <span className="patient-name">{patientCard.name} {patientCard.surname}</span>
+       <span className="patient-name">{patientCard.name} {patientCard.surname}</span>
       </div>
 
       <form onSubmit={handleSubmit} className="datapatient-form">
@@ -80,18 +93,27 @@ const DataPatient = () => {
             onChange={handleChange}
             required
           />
+          {errors.age && <span className="error-message">{errors.age}</span>}
         </div>
         <div>
-          <label>Płeć:</label>
-          <input
-            type="text"
-            name="sex"
-            value={form.sex}
-            onChange={handleChange}
+          <label>Płeć:</label> 
+
+    <select
+            name = "sex"
+            value = {form.sex}
+            onChange = {handleChange}
             required
-          />
+            >
+              <option value="">Wybierz płeć</option>
+              <option value="Male">Mężczyzna</option>
+              <option value="Female">Kobieta</option>
+              <option value="Other">Inna</option>
+            </select>
+            {errors.sex && <span className="error-message">{errors.sex}</span>}
         </div>
         <div>
+
+           
           <label>Przyjmowane leki:</label>
           <input
             type="text"
@@ -100,6 +122,7 @@ const DataPatient = () => {
             onChange={handleChange}
           />
         </div>
+        {errors.takingMedication && <span className="error-message">{errors.takingMedication}</span>}
         <div>
           <label>Przebyte choroby:</label>
           <input
@@ -109,6 +132,7 @@ const DataPatient = () => {
             onChange={handleChange}
           />
         </div>
+        {errors.pastIllnesses && <span className="error-message">{errors.pastIllnesses}</span>}
         <div>
           <label>Choroby przewlekłe:</label>
           <input
@@ -118,6 +142,7 @@ const DataPatient = () => {
             onChange={handleChange}
           />
         </div>
+         {errors.chronicDiseases && <span className="error-message">{errors.chronicDiseases}</span>}
         <div>
           <label>Szczepienia:</label>
           <input
@@ -127,6 +152,7 @@ const DataPatient = () => {
             onChange={handleChange}
           />
         </div>
+        {errors.vaccinations && <span className="error-message">{errors.vaccinations}</span>}
         <div>
           <label>Alergie:</label>
           <input
@@ -136,6 +162,7 @@ const DataPatient = () => {
             onChange={handleChange}
           />
         </div>
+         {errors.allergies && <span className="error-message">{errors.allergies}</span>}
         <div>
           <label>Historia rodzinna:</label>
           <input
@@ -145,24 +172,35 @@ const DataPatient = () => {
             onChange={handleChange}
           />
         </div>
+         {errors.familyHistory && <span className="error-message">{errors.familyHistory}</span>}
         <div>
           <label>Palenie:</label>
-          <input
-            type="text"
+          <select
             name="smoking"
             value={form.smoking}
             onChange={handleChange}
-          />
+            required
+          >
+              <option value ="">Wybierz opcję</option>
+              <option value="Yes"> Tak </option>
+              <option value ="No"> Nie </option>
+            </select>
+             {errors.smoking && <span className="error-message">{errors.smoking}</span>}
         </div>
         <div>
           <label>Alkohol:</label>
-          <input
-            type="text"
+          <select
             name="alcohol"
             value={form.alcohol}
             onChange={handleChange}
-          />
-        </div>
+            required
+          >
+            <option value="">Wybierz opcję</option>
+            <option value = "Yes"> Tak </option>
+            <option value = "No"> Nie </option>
+          </select>
+          {errors.alcohol && <span className="error-message">{errors.alcohol}</span>}
+            </div>
         <button type="submit">Wyślij</button>
       </form>
     </div>

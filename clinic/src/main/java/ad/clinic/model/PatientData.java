@@ -6,6 +6,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "survey")
@@ -13,15 +18,40 @@ public class PatientData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @NotNull(message = "Age cannot be null")
+    @Min(value = 1, message = "Age cannot be less than 0")
+    @Max(value = 120, message = "Age cannot be more than 120")
     int age;
+    
+    @NotBlank(message = "Sex cannot be empty")
+    @Pattern(regexp = "^(Male|Female|Other)$", message = "Sex must be Male, Female, or Other")
     String sex; 
+    
+    @NotBlank(message = "Taking medication status cannot be empty")
     String takingMedication;
+
+    @NotBlank(message = "Past Ilnesses connot be empty")
     String pastIllnesses;
+
+    @NotBlank(message = "Chronic diseases cannot be empty")
     String chronicDiseases;
+
+    @NotBlank(message = "Vaccinations status cannot be empty" )
     String vaccinations;  
+
+    @NotBlank(message = "Allergirs information cannot be empty")
     String allergies;
+
+    @NotBlank(message = "Family history cannot be empty")
     String familyHistory;
+
+    @NotBlank(message = "Smoking status cannot be empty")
+    @Pattern(regexp = "^(Yes|No)$", message = "Smoking status must be Yes, No, or Former")
     String smoking;
+
+    @NotBlank(message = "Alcohol consumption status cannot be empty")
+    @Pattern(regexp = "^(Yes|No)$", message = "Alcohol consumption must be Yes, No, Moderate, or Heavy")
     String alcohol;
     @OneToOne(mappedBy = "patientData")
     private Patient patient;

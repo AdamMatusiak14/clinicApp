@@ -21,7 +21,8 @@
   display: block;
 }
 
-.datapatient-form input {
+.datapatient-form input,
+.datapatient-form select {
   padding: 8px;
   margin-bottom: 16px;
   border-radius: 4px;
@@ -38,4 +39,12 @@
   border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.error-message {
+  color: #ff4d4d; /* Jasnoczerwony kolor dla błędów */
+  font-size: 0.85em;
+  margin-top: -12px; /* Przybliżenie do pola */
+  margin-bottom: 16px; /* Zachowanie odstępu poniżej */
+  display: block; /* Upewnia się, że komunikat jest w nowej linii */
 }
