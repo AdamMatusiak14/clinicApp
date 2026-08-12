@@ -1,5 +1,5 @@
 import React,  { useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from "../components/apiClient";
 import "../components/css/Visitis.css";
 
 
@@ -18,7 +18,7 @@ import "../components/css/Visitis.css";
 
   
   useEffect(() => {
-      axios.get("http://localhost:8080/api/doctors/names")
+      apiClient.get("/doctors/names")
       .then((response) => {
         console.log("To przychodzi z backendu", response.data); // sprawdź co zwraca backend
         setDoctors(response.data);  // ustaw dane w stanie
@@ -32,7 +32,7 @@ import "../components/css/Visitis.css";
  useEffect(() => {
   if (!form.date || !form.doctor) return;
 
-  axios.get(`http://localhost:8080/api/visit/available?doctorId=${form.doctor}&date=${form.date}`)
+  apiClient.get(`/visit/available`, { params: { doctorId: form.doctor, date: form.date } })
        .then(res => setTimes(res.data))
        .catch(err => console.error(err));
 }, [form.date, form.doctor]);
@@ -53,7 +53,7 @@ import "../components/css/Visitis.css";
 
 
 try {
-    await axios.post("http://localhost:8080/api/visit/create", payload);
+    await apiClient.post("/visit/create", payload);
     alert("Wizyta została umówiona!");
     // czyścimy formularz
     setForm({

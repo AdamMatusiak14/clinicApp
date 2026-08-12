@@ -27,6 +27,7 @@ import ad.clinic.model.Visit;
 import ad.clinic.service.DoctorService;
 import ad.clinic.service.PatientService;
 import ad.clinic.service.VisitService;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -111,7 +112,7 @@ public class VisitController {
     }
 
     @PostMapping("/create")
-    ResponseEntity<String> createVisit(@RequestBody VisitFrontDTO visitFrontDTO) {
+    ResponseEntity<String> createVisit(@RequestBody @Valid VisitFrontDTO visitFrontDTO) {
 
         logger.debug("Creating visit for patient {} {} with doctor {} on {} at {}",
                 visitFrontDTO.getFirstName(), visitFrontDTO.getLastName(), visitFrontDTO.getDoctor(),
@@ -128,6 +129,8 @@ public class VisitController {
         
         return ResponseEntity.ok("Visit created successfully"); // Return success message
     }
+
+    
 
 
     
