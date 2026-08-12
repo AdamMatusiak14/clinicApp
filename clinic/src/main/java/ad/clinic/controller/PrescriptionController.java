@@ -31,6 +31,7 @@ import ad.clinic.service.DoctorService;
 import ad.clinic.service.PatientService;
 import ad.clinic.service.PdfGeneratorService;
 import ad.clinic.service.PrescriptionService;
+import jakarta.validation.Valid;
 
 
 @CrossOrigin(origins = "http://localhost:3000") 
@@ -76,9 +77,11 @@ public class PrescriptionController {
            String patientFirstName = patient.getFirstName();
            String patientLastName = patient.getLastName();
 
-           logger.debug("Prescription details for patient {} {}: doctor {} {}", patientFirstName, patientLastName, doctorFirstName, doctorLastName);
+          
+           prescriptionsDTO.add(new PrescriptionDTO(code, issueDate, patientFirstName, patientLastName, doctorFirstName, doctorLastName, medicine));
+        }
 
-     
+          
 
       byte[] pdfBytes = pdfGeneratorService.generatePrescriptionPdf(prescriptionsDTO);
 
@@ -127,7 +130,7 @@ public class PrescriptionController {
     }
 
 @PostMapping("/create")
-public ResponseEntity<Void> createPrescription(@RequestBody PrescriptionCreateRequestDTO request, @AuthenticationPrincipal UserDetails userDetails){
+public ResponseEntity<Void> createPrescription(@RequestBody @Valid PrescriptionCreateRequestDTO request, @AuthenticationPrincipal UserDetails userDetails){
     
     logger.debug("Creating prescription for doctor {}", userDetails.getUsername());
 

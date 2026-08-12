@@ -30,6 +30,7 @@ export default function DoctorDataPatient() {
    
   });
   const [creatingPrescription, setCreatingPrescription] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   // Pobranie danych pacjenta
   useEffect(() => {
@@ -86,8 +87,10 @@ export default function DoctorDataPatient() {
   };
 
   const handleCreatePrescription = async () => {
+      setValidationErrors({});
     if (!newPrescription.medicine) {
       alert("Wypełnij wymagane pole: leki");
+      setValidationErrors({ medicine: "Pole leki jest wymagane" });
       return;
     }
 
@@ -106,9 +109,15 @@ export default function DoctorDataPatient() {
       });
       setExpandedTab(null);
       fetchPrescriptions();
+      setValidationErrors({});
     } catch (err) {
       console.error("Błąd podczas tworzenia recepty:", err);
-      alert("Błąd podczas wystawienia recepty");
+
+      if(err.response && err.response.status === 400 && err.response.data){
+        setValidationErrors(err.response.data);
+      }else{
+      alert("Błąd podczas wystawienia recepty" + (err.response?.data || err.message || "Nieznany błąd"));
+      }
     } finally {
       setCreatingPrescription(false);
     }
@@ -119,6 +128,12 @@ export default function DoctorDataPatient() {
       ...prev,
       [field]: value
     }));
+
+    setValidationErrors(prev => {
+      const newErrors = { ...prev};
+      delete newErrors[field];
+      return newErrors;
+    });
   };
 
   if (loading) {
@@ -248,7 +263,14 @@ export default function DoctorDataPatient() {
                       onChange={(e) => handleInputChange("medicine", e.target.value)}
                       placeholder="Nazwa leku"
                       required
+                      style = {validationErrors.medicine ? { borderColor: "red" } : {}}
                     />
+                    {validationErrors.medicine && (
+                      <p style={{ color: "red", marginTop: 4 }}>{validationErrors.medicine}</p>
+                    )}
+                  </div>
+                    <div>
+
                   </div>
 
                   <button 

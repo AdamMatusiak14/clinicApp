@@ -1,7 +1,13 @@
 package ad.clinic.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class PrescriptionCreateRequestDTO {
     private Long patientId;
+
+    @NotBlank(message = "Medicine cannot be blank")
+    @Size(min = 2, max=100, message = "Medicine must be between 2 and 100 characters")
     private String medicine;
 
     // Getters and setters
