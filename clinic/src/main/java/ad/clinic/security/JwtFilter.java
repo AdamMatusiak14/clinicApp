@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try{
         // If Authorization header is missing or doesn't contain a Bearer token, skip
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            logger.warn("Brak lub nieprawidłowy nagłówek Authorization");
+            logger.warn("Brak lub nieprawidłowy nagłówek Authorization"); // Wyrzuca ten błąd
             filterChain.doFilter(request, response);
             return;
         }

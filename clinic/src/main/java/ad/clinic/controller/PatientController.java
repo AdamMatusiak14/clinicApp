@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 import ad.clinic.DTO.patientDTO.PatientDoctorCardDTO;
 import ad.clinic.DTO.PatientCardDTO;
 import ad.clinic.DTO.PatientDTO;
+import ad.clinic.DTO.PatientRegistrationDTO;
 import ad.clinic.model.Patient;
 import ad.clinic.model.PatientData;
 import ad.clinic.service.PatientService;
 import ad.clinic.service.SurveyService;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -47,10 +49,10 @@ public class PatientController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerPatient(@RequestBody Patient patient) {
+    public ResponseEntity<String> registerPatient(@Valid @RequestBody PatientRegistrationDTO patientDTO) {
 
         try {
-            patientService.registerPatient(patient);
+             patientService.registerPatient(patientDTO);
             return ResponseEntity.ok("Patient registered successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error registering patient: " + e.getMessage());

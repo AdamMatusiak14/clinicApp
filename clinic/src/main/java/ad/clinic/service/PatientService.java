@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ad.clinic.DTO.PatientDTO;
+import ad.clinic.DTO.PatientRegistrationDTO;
 import ad.clinic.DTO.patientDTO.PatientCredentailMapperDTO;
 import ad.clinic.DTO.patientDTO.PatientCredentialDTO;
 import ad.clinic.model.Patient;
@@ -29,9 +30,14 @@ public class PatientService {
 
 
 
-   public void registerPatient(Patient patient) {
+   public void registerPatient(PatientRegistrationDTO patientDTO) {
+        Patient patient = new Patient();
+        patient.setFirstName(patientDTO.getFirstName());
+        patient.setLastName(patientDTO.getLastName());
+        patient.setEmail(patientDTO.getEmail());
+
         patient.setRole("PATIENT");
-        String encodedPassword = passwordEncoder.encode(patient.getPassword());
+        String encodedPassword = passwordEncoder.encode(patientDTO.getPassword());
         patient.setPassword(encodedPassword);
         patientRepository.save(patient);
     }

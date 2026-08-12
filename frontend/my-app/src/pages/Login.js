@@ -19,8 +19,10 @@ function LoginForm() {
       sessionStorage.setItem("token", data.token);
       navigate("/");
     } catch (error) {
-      alert("Błąd: " + (error.response?.status ?? error.message));
-      navigate("/login");
+      const apiMessage = error.response?.data?.message;
+      const displayMessage = apiMessage || error.response?.statusText || error.message;
+      setError(displayMessage);
+      console.error("Login error:", error.response || error);
     }
   };
 

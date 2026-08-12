@@ -13,7 +13,6 @@ public class AuthRequest {
     @NotBlank(message="Password must not be empty")
     private String password;  
 
-    @NotBlank(message="Id must not be empty")
     private Long id; 
 
     public AuthRequest() {}

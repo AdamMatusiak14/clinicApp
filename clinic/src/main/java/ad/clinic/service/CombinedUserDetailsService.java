@@ -50,6 +50,7 @@ public class CombinedUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails mapPatient(Patient p) {
+       
         return User.builder()
                 .username(p.getEmail())
                 .password(p.getPassword())
@@ -58,6 +59,7 @@ public class CombinedUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails mapDoctor(Doctor d) {
+       
         return User.builder()
                 .username(d.getEmail())
                 .password(d.getPassword())

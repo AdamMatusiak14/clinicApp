@@ -39,3 +39,14 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+.error-message {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 5px;
+}
+
+.input-error {
+  border: 1px solid red;
+  /* Możesz dodać inne style, np. box-shadow */
+}
