@@ -1,6 +1,7 @@
 package ad.clinic.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ad.clinic.DTO.PatientDTO;
 import ad.clinic.model.Patient;
 import ad.clinic.repository.PatientRepository;
+import ad.clinic.DTO.PatientRegistrationDTO;
 
 @ExtendWith(MockitoExtension.class)
 public class PatientServiceTest {
@@ -34,6 +37,7 @@ public class PatientServiceTest {
 
     private Patient patient;
     private PatientDTO patientDTO;
+    private PatientRegistrationDTO patientRegistrationDTO;  
 
     @BeforeEach
     void setUp() {
@@ -42,7 +46,7 @@ public class PatientServiceTest {
         patient.setEmail("patient@example.com");
         patient.setFirstName("Jane");
         patient.setLastName("Doe");
-        patient.setPassword("password");
+        patient.setPassword("encodedPassword");
         patient.setRole("PATIENT");
         patient.setInfoPatient("Some info");
 
@@ -50,19 +54,46 @@ public class PatientServiceTest {
         patientDTO.setId(1L);
         patientDTO.setFirstName("Jane");
         patientDTO.setLastName("Doe");
+
+        patientRegistrationDTO = new PatientRegistrationDTO();
+        patientRegistrationDTO.setFirstName("Jane");
+        patientRegistrationDTO.setLastName("Doe");
+        patientRegistrationDTO.setEmail("patient@example.com");
+        patientRegistrationDTO.setPassword("password");
+
     }
 
     @Test
     void testRegisterPatient() {
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
-        when(patientRepository.save(any(Patient.class))).thenReturn(patient);
 
-        patientService.registerPatient(patient);
+        ArgumentCaptor<Patient> patientCaptor = ArgumentCaptor.forClass(Patient.class);
 
-        assertEquals("PATIENT", patient.getRole());
-        assertEquals("encodedPassword", patient.getPassword());
+
+        when(patientRepository.save(patientCaptor.capture())).thenAnswer(invocation ->{
+            Patient savePatient = invocation.getArgument(0);
+            savePatient.setId(1L); // Simulate setting the ID after saving
+            return savePatient;
+        }
+        );
+
+        patientService.registerPatient(patientRegistrationDTO);
+
+      
         verify(passwordEncoder, times(1)).encode("password");
-        verify(patientRepository, times(1)).save(patient);
+        verify(patientRepository, times(1)).save(any(Patient.class));
+
+        Patient capturePatient = patientCaptor.getValue();
+        
+        assertNotNull(capturePatient);
+        assertEquals("Jane", capturePatient.getFirstName());
+        assertEquals("Doe", capturePatient.getLastName());
+        assertEquals("patient@example.com", capturePatient.getEmail());
+        
+        assertEquals("PATIENT", capturePatient.getRole());
+        assertEquals("encodedPassword", capturePatient.getPassword());
+        assertNull(capturePatient.getInfoPatient());
+      
     }
 
     @Test
