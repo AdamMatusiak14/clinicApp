@@ -22,6 +22,7 @@ import ad.clinic.model.Patient;
 import ad.clinic.model.PatientData;
 import ad.clinic.service.PatientService;
 import ad.clinic.service.SurveyService;
+import ad.clinic.DTO.PatientRegistrationDTO;
 
 @ExtendWith(MockitoExtension.class)
 public class PatientControllerTest {
@@ -41,6 +42,7 @@ public class PatientControllerTest {
     private PatientDTO patientDTO2;
     private PatientCardDTO patientCardDTO1;
     private PatientData survey;
+    private PatientRegistrationDTO patientRegistrationDTO;
 
     
 @BeforeEach
@@ -93,36 +95,46 @@ public class PatientControllerTest {
         survey.setPatient(testPatient1);
         testPatient1.setPatientData(survey);
         survey.getPatient().setId(1L);
+            
+        patientRegistrationDTO = new PatientRegistrationDTO();
+        patientRegistrationDTO.setEmail("alice@example.com");
+        patientRegistrationDTO.setPassword("alice123");
+        patientRegistrationDTO.setFirstName("Alice");
+        patientRegistrationDTO.setLastName("Johnson");  
+
+
+
+
             }
 
     // Add test methods here
     @Test
     void resgisterPatient_ShouldRegisterSuccessfully() {
 
-        doNothing().when(patientService).registerPatient(testPatient1);
+        doNothing().when(patientService).registerPatient(patientRegistrationDTO);
 
-       ResponseEntity <String> response =  patientController.registerPatient(testPatient1);   
+       ResponseEntity <String> response =  patientController.registerPatient(patientRegistrationDTO);   
        // Patient registered successfully
 
        assertEquals(200, response.getStatusCodeValue());
      
 
-        verify(patientService, times(1)).registerPatient(testPatient1);
-       
+        verify(patientService, times(1)).registerPatient(patientRegistrationDTO);
+    
     }   
 
     @Test
     void registerPatient_ShouldRegisterFailure() {
 
-        doThrow(new RuntimeException("Database error")).when(patientService).registerPatient(testPatient2);
+        doThrow(new RuntimeException("Database error")).when(patientService).registerPatient(patientRegistrationDTO);
 
-       ResponseEntity <String> response =  patientController.registerPatient(testPatient2);   
+       ResponseEntity <String> response =  patientController.registerPatient(patientRegistrationDTO);   
        // Patient registered successfully
 
        assertEquals(500, response.getStatusCodeValue());
        assertEquals("Error registering patient: Database error", response.getBody());
 
-        verify(patientService, times(1)).registerPatient(testPatient2);
+        verify(patientService, times(1)).registerPatient(patientRegistrationDTO);
        
     }   
 

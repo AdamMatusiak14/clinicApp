@@ -23,6 +23,16 @@ public class PatientRegistrationDTO {
     @Size(min = 3, message = "Hasło musi mieć co najmniej 3 znaki")
     private String password;
 
+    public PatientRegistrationDTO() {
+    }
+
+    public PatientRegistrationDTO( String email, String firstName, String lastName, String password) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }   
+
     // Getters and Setters
     public String getEmail() {
         return email;
