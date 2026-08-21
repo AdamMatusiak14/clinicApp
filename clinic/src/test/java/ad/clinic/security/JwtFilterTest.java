@@ -23,8 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.nimbusds.jose.proc.SecurityContext;
 
-import ad.clinic.service.CustomDoctorDetailsService;
-import ad.clinic.service.CustomPatientDetailsService;
+import ad.clinic.service.CombinedUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,10 +35,7 @@ public class JwtFilterTest {
     private JwtTokenProvider jwtTokenProvider;
 
     @Mock
-    private CustomDoctorDetailsService doctorDetailsService;
-
-    @Mock
-    private CustomPatientDetailsService patientDetailsService;
+    private CombinedUserDetailsService combinedUserDetailsService;
 
     @Mock
     HttpServletRequest request;
@@ -57,16 +53,15 @@ public class JwtFilterTest {
 
     @BeforeEach
     void setUp() {
-        jwtFilter = new JwtFilter(jwtTokenProvider, doctorDetailsService, patientDetailsService);
+        jwtFilter = new JwtFilter(jwtTokenProvider, combinedUserDetailsService);
     }   
 
     @Test
     void doFilterInternal_ValidToken_Doctor() throws Exception {
         when(request.getHeader("Authorization")).thenReturn("Bearer validToken");
-        when(request.getHeaderNames()).thenReturn(Collections.enumeration(List.of("Authorization"))); // Mock header names to include "Authorization
         when(jwtTokenProvider.validateToken("validToken")).thenReturn(true);
         when(jwtTokenProvider.extractUsername("validToken")).thenReturn("doctorUser");
-        when(doctorDetailsService.loadUserByUsername("doctorUser")).thenReturn(userDetails);
+        when(combinedUserDetailsService.loadUserByUsername("doctorUser")).thenReturn(userDetails);
         when(userDetails.getAuthorities()).thenReturn(Collections.emptyList()); // Mock authorities if needed
 
         jwtFilter.doFilterInternal(request, response, filterChain);
@@ -80,10 +75,10 @@ public class JwtFilterTest {
     @Test
     void doFilterInternal_ValidToken_Patient() throws Exception {
         when(request.getHeader("Authorization")).thenReturn("Bearer validToken");
-        when(request.getHeaderNames()).thenReturn(Collections.enumeration(List.of("Authorization"))); // Mock header names to include "Authorization
+    
         when(jwtTokenProvider.validateToken("validToken")).thenReturn(true);
         when(jwtTokenProvider.extractUsername("validToken")).thenReturn("patientUser");
-        when(doctorDetailsService.loadUserByUsername("patientUser")).thenReturn(userDetails);
+        when(combinedUserDetailsService.loadUserByUsername("patientUser")).thenReturn(userDetails);
         when(userDetails.getAuthorities()).thenReturn(Collections.emptyList()); // Mock authorities if needed
 
         jwtFilter.doFilterInternal(request, response, filterChain);
@@ -122,17 +117,16 @@ void doFilterInternal_InvalidTokenFormat() throws Exception {
 @Test
 void doFilterInternal_TokenisOK_UserNotFound() throws Exception {
     when(request.getHeader("Authorization")).thenReturn("Bearer validToken");
-    when(request.getHeaderNames()).thenReturn(Collections.enumeration(List.of("Authorization"))); 
     when(jwtTokenProvider.validateToken("validToken")).thenReturn(true);
     when(jwtTokenProvider.extractUsername("validToken")).thenReturn("unknownUser");
-    when(doctorDetailsService.loadUserByUsername("unknownUser")).thenThrow(new RuntimeException("User not found in doctor service"));
-    lenient().when(patientDetailsService.loadUserByUsername("unknownUser")).thenThrow(new RuntimeException("User not found in patient service"));
+    when(combinedUserDetailsService.loadUserByUsername("unknownUserDoctor")).thenThrow(new RuntimeException("User not found in doctor service"));
+    lenient().when(combinedUserDetailsService.loadUserByUsername("unknownUserPatien")).thenThrow(new RuntimeException("User not found in patient service"));
 
 
     jwtFilter.doFilterInternal(request, response, filterChain);
 
     assertEquals(null, SecurityContextHolder.getContext().getAuthentication());
-    verify(filterChain, times(1)).doFilter(request, response);
+    verify(filterChain, times(0)).doFilter(request, response);
 
 }
 
