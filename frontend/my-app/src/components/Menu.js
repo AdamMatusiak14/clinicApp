@@ -31,29 +31,7 @@ function Menu() {
         </ul>
       </nav>
   
-       <table>
-          <thead>
-            <tr>
-              <th>Imię</th>
-              <th>Nazwisko</th>
-              <th>Hasło</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Robute</td>
-              <td>Guiliman</td>
-              <td>robu</td>
-             </tr>
-          </tbody>
-          <tbody>
-            <tr>
-              <td>Leman</td>
-              <td>Russ</td>
-              <td>lema</td>
-             </tr>
-          </tbody>
-        </table>
+      
   </div>
 
 
